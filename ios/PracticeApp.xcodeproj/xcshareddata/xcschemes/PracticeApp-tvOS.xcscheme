@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "PracticeApp-tvOS.app"
-               BlueprintName = "PracticeApp-tvOS"
-               ReferencedContainer = "container:PracticeApp.xcodeproj">
+               BuildableName = "ChatSpot-tvOS.app"
+               BlueprintName = "ChatSpot-tvOS"
+               ReferencedContainer = "container:ChatSpot.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "PracticeApp-tvOSTests.xctest"
-               BlueprintName = "PracticeApp-tvOSTests"
-               ReferencedContainer = "container:PracticeApp.xcodeproj">
+               BuildableName = "ChatSpot-tvOSTests.xctest"
+               BlueprintName = "ChatSpot-tvOSTests"
+               ReferencedContainer = "container:ChatSpot.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "PracticeApp-tvOS.app"
-            BlueprintName = "PracticeApp-tvOS"
-            ReferencedContainer = "container:PracticeApp.xcodeproj">
+            BuildableName = "ChatSpot-tvOS.app"
+            BlueprintName = "ChatSpot-tvOS"
+            ReferencedContainer = "container:ChatSpot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "PracticeApp-tvOS.app"
-            BlueprintName = "PracticeApp-tvOS"
-            ReferencedContainer = "container:PracticeApp.xcodeproj">
+            BuildableName = "ChatSpot-tvOS.app"
+            BlueprintName = "ChatSpot-tvOS"
+            ReferencedContainer = "container:ChatSpot.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

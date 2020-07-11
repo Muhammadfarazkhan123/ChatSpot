@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PracticeApp</string>
+    <string name="app_name">ChatSpot</string>
     <string name="facebook_app_id">260260981733204</string>
     <string name="fb_login_protocol_scheme">fb260260981733204</string>
 </resources>

@@ -44,8 +44,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'PracticeApp' do
-  # Pods for PracticeApp
+target 'ChatSpot' do
+  # Pods for ChatSpot
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -95,10 +95,10 @@ target 'PracticeApp' do
   end
 end
 
-target 'PracticeApp-tvOS' do
-  # Pods for PracticeApp-tvOS
+target 'ChatSpot-tvOS' do
+  # Pods for ChatSpot-tvOS
 
-  target 'PracticeApp-tvOSTests' do
+  target 'ChatSpot-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
