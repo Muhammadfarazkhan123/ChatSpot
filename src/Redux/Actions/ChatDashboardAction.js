@@ -67,10 +67,13 @@ export const GroupCreate = props => {
   const {AllUsersReducer,ChatDashboardReducer}=store.getState()
   const states = store.getState().ChatDashboardReducer;
   const SearchArray=AllUsersReducer?.searchArr;
+  console.log(states.imageUrl)
   return async dispatch => {
-    if (states.groupName != '') {
+    if (states.groupName != '' && states.imageUrl != '') {
+    dispatch(SET_SHOW_LOADER(true))
+
       const reference = storage().ref('Images/' + new Date().getTime());
-      await reference.putFile(states.imageUrl.uri);
+      await reference.putFile(states.imageUrl);
       const url = await reference.getDownloadURL();
       console.log(url, 'url');
 
@@ -127,17 +130,28 @@ export const GroupCreate = props => {
               store.dispatch(SET_ALLUSERS_SEARCH(SearchArray));
 
             })
+            dispatch(SET_GROUP_IMAGE(""))
+            dispatch(ActiveChat(GroupObj));
+            dispatch(SET_ISGROUP(true));
             dispatch(SET_SHOW_LOADER(false))
             dispatch(SET_SHOW_LOTTIE(true))
             
-            dispatch(ActiveChat(GroupObj));
-            dispatch(SET_ISGROUP(true));
 
           }
             
           )
     } else {
-      alert('please enter group name');
+      if(states.groupName === "" && states.imageUrl === ""){
+        alert("please select image and enter your group name")
+      }
+      else if(states.groupName === ""){
+        alert('please enter group name');
+      }
+      else if(states.imageUrl === ""){
+        alert('please Select group Image');
+      }
+      console.log(states.groupName === "" && states.imageUrl === "","check")
+      console.log(states,"check state")
     }
   };
 };

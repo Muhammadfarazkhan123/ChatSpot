@@ -19,6 +19,7 @@ import styles from './style';
 import { ActiveChat } from '../../Redux/Actions/ActiveChatAction';
 import { SET_MSG_ARR } from '../../Redux/Actions/ChatBoxAction';
 import Loader from "../../Components/Loader/index";
+import ImagePicker from 'react-native-image-crop-picker';
 import {
   ChatDashboard,
   SET_GROUP_NAME,
@@ -33,7 +34,6 @@ import { SET_ISGROUP } from '../../Redux/Actions/GroupAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FeatherIcon from "react-native-vector-icons/Feather";
-import ImagePicker from 'react-native-image-picker';
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import LottieView from 'lottie-react-native'
@@ -169,7 +169,6 @@ const Chat = props => {
     store.dispatch(GroupSelection(index))
   };
   const groupChat = () => {
-    store.dispatch(SET_SHOW_LOADER(true))
     store.dispatch(GroupCreate(props));
 
   };
@@ -185,11 +184,14 @@ const Chat = props => {
           <Text style={styles.GroupListTitle}>{Item?.displayName}</Text>
         </View>
         {Item.isSelected && (
-          <Icon name="check-circle" size={30} color="green" />
+  <Icon name="check-circle" size={30} color="green" style={{alignItems:"center"}} />
         )}
       </TouchableOpacity>
     );
   };
+
+
+
 
   const Search = Text => {
     const Result = Groupstate?.UsersDetail?.filter(Res =>
@@ -198,33 +200,24 @@ const Chat = props => {
 
     store.dispatch(SET_ALLUSERS_SEARCH(Result));
   };
+
+
+
   const AddImage = () => {
-    ImagePicker.showImagePicker(response => {
-      // console.log('Response = ', response);
-
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-        store.dispatch(SET_GROUP_IMAGE(source));
-
-        if (
-          store.getState().ChatDashboardReducer.imageUrl.hasOwnProperty('uri')
-        ) {
-          alert('Image selected succesfully');
-        }
-        SetImageSource(source);
-      }
+   
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      alert('Image selected succesfully');
+      store.dispatch(SET_GROUP_IMAGE(image.path))
+      console.log(image.path);
     });
   };
+
+
+
   return (
     <View style={{ flex: 1 }}>
 
@@ -262,7 +255,10 @@ const Chat = props => {
           </View>
         </ScrollView>
       </View> */}
+
+
       <View>
+
         <FeatherIcon
           size={25}
           name="search"
@@ -307,6 +303,8 @@ const Chat = props => {
               style={styles.CloseButton}
               onPress={() => {
                 store.dispatch(SET_SHOW_MODAL(!ReducerState.showModal));
+                store.dispatch(SET_GROUP_IMAGE(""))
+                store.dispatch(SET_GROUP_NAME(""))
               }}>
               <Entypo size={30} name="circle-with-cross" color="rgb(28, 98, 219)" />
             </TouchableOpacity>

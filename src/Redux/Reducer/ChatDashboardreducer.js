@@ -16,7 +16,8 @@ const InitialState = {
   groupName: '',
   showModal:false,
   showLottie:false,
-  showLoader:false
+  showLoader:false,
+  imageUrl:""
   
 };
 
