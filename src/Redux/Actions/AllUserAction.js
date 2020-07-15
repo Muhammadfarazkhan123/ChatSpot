@@ -10,8 +10,7 @@ export const AllUserAction = () => {
   return dispatch => {
     firestore()
       .collection('Users')
-      .get()
-      .then(querySnapshot => {
+      .onSnapshot(querySnapshot => {
         UsersDetail = [];
         SearchArr = [];
         querySnapshot.forEach(UsersData => {
@@ -19,10 +18,10 @@ export const AllUserAction = () => {
           if (UsersData.data().UserUid != UserUid) {
             UsersDetail.push(UsersData.data());
             SearchArr.push(UsersData.data());
-            dispatch(SET_ALLUSERS(UsersDetail));
-            dispatch(SET_ALLUSERS_SEARCH(SearchArr));
           }
         });
+        dispatch(SET_ALLUSERS(UsersDetail));
+        dispatch(SET_ALLUSERS_SEARCH(SearchArr));
       });
   };
 };

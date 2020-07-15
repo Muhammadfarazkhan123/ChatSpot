@@ -26,40 +26,63 @@ export const ChatDashboard = () => {
     console.log(store?.getState()?.UserReducer?.user,"userUid data")
 
     // const UsersArray = [];
-    firestore()
-      .collection('Users')
-      .get()
-      .then(querySnapshot => {
-        UsersDetail = [];
-        querySnapshot.forEach(UsersData => {
-          if (UsersData.data().UserUid != UserUid) {
-            UsersDetail.push(UsersData.data());
-            dispatch(USER_DETAIL(UsersDetail));
-          }
-        });
-      });
-    firestore()
+    // firestore()
+    //   .collection('Users')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     UsersDetail = [];
+    //     querySnapshot.forEach(UsersData => {
+    //       if (UsersData.data().UserUid != UserUid) {
+    //         UsersDetail.push(UsersData.data());
+    //       }
+    //     });
+    //     dispatch(USER_DETAIL(UsersDetail));
+    //   });
+      firestore()
       .collection('Users')
       .doc(UserUid)
-      .onSnapshot(UserData => {
+      .onSnapshot(async UserData => {
         ChatUser = [];
         GroupUser = [];
-        UserData?.data()?.ChatId?.map(value => {
-          console.log(value, 'value');
-          if (value.hasOwnProperty('MemberUid')) {
-            ChatUser.push(value);
+        ChatId=UserData?.data()?.ChatId
+        // UserData?.data()?.ChatId?.map(value => {
+        //   // console.log(value, 'value');
+        //   if (value.hasOwnProperty('MemberUid')) {
+        //     ChatUser.push(value);
+        //     dispatch(SET_CHAT_USER(ChatUser));
+        //   } else if (!value.hasOwnProperty('MemberUid')) {
+        //     firestore()
+        //       .collection('Users')
+        //       .doc(value.Uid)
+        //       .onSnapshot(Detail => {
+        //         // console.log(Detail.data(),"detail on online")
+        //         ChatUser.push(Detail.data());
+        //     dispatch(SET_CHAT_USER(ChatUser));
+
+        //       });
+        //     }
+        //     // console.log(ChatUser,"ChatUser")
+        //     // dispatch(SET_CHAT_USER(ChatUser));
+        //   });
+
+      for (let i = 0; i < ChatId.length; i++) {
+          // console.log(ChatId[i], 'value');
+          let value=ChatId[i]
+        if (value.hasOwnProperty('MemberUid')) {
+                ChatUser.push(value);
+              } else if (!value.hasOwnProperty('MemberUid')) {
+                await firestore()
+                .collection('Users')
+                .doc(value.Uid)
+                .onSnapshot(Detail => {
+                  // console.log(Detail.data(),"detail on online")
+                  ChatUser.push({...Detail.data()});
+                });
+              }
+            }
+            console.log(ChatUser,"chatuser")
             dispatch(SET_CHAT_USER(ChatUser));
-          } else if (!value.hasOwnProperty('MemberUid')) {
-            firestore()
-              .collection('Users')
-              .doc(value.Uid)
-              .onSnapshot(Detail => {
-                ChatUser.push(Detail.data());
-                dispatch(SET_CHAT_USER(ChatUser));
-              });
-          }
-        });
-      });
+          });
   };
 };
 

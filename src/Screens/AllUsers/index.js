@@ -30,6 +30,7 @@ const AllUsers = props => {
     if (ThisUpdate) {
       store.dispatch(AllUserAction());
       store.subscribe(() => {
+        console.log('subscribe all user')
         SetReducerState(store.getState().AllUsersReducer);
       });
       SetThisUpdate(false);

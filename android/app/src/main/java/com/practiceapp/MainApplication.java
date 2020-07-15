@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {
@@ -31,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           packages.add(new LottiePackage());
+          // packages.add(new ReactNativeFirebaseMessagingPackage());
           return packages;
         }
 

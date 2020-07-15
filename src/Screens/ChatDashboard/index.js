@@ -20,6 +20,7 @@ import { ActiveChat } from '../../Redux/Actions/ActiveChatAction';
 import { SET_MSG_ARR } from '../../Redux/Actions/ChatBoxAction';
 import Loader from "../../Components/Loader/index";
 import ImagePicker from 'react-native-image-crop-picker';
+import moment from 'moment';
 import {
   ChatDashboard,
   SET_GROUP_NAME,
@@ -60,8 +61,11 @@ const Chat = props => {
     store.dispatch(AllUserAction());
 
     store.subscribe(() => {
+      // console.log('subscribe dashboard')
       SetReducerState(store.getState().ChatDashboardReducer);
       setGroupstate(store.getState().AllUsersReducer);
+      // console.log(store?.getState()?.ChatDashboardReducer?.chatUser.length,"dashboard chat reducer")
+
     });
 
 
@@ -134,6 +138,16 @@ const Chat = props => {
       );
     }
     if (!Item.hasOwnProperty('MemberUid')) {
+    const UserUid = store?.getState()?.UserReducer?.user?.uid;
+      // console.log(Item.ChatId,"item check")
+      let lastMsg
+      let time
+      Item.ChatId.filter(v=>{
+        if(v.Uid === UserUid){
+          lastMsg=v.lastMsg
+          time=v.Time
+        }
+      })
       return (
         <TouchableOpacity
           style={styles.MainListView}
@@ -149,12 +163,12 @@ const Chat = props => {
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item?.displayName}</Text>
-              <Text style={{ color: "grey" }}>5 min</Text>
+        <Text style={{ color: "grey" }}>{moment(time).fromNow()}</Text>
             </View>
 
 
             <View style={styles.msgNotiView}>
-              <Text style={styles.LastMsgStyle}>you:kese ho</Text>
+        <Text style={styles.LastMsgStyle}>{lastMsg}</Text>
               <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
               </View>
@@ -216,8 +230,7 @@ const Chat = props => {
     });
   };
 
-
-
+// console.log(ReducerState?.chatUser.length)
   return (
     <View style={{ flex: 1 }}>
 
@@ -266,16 +279,18 @@ const Chat = props => {
         />
         <Text style={styles.HeadStyle}>Messages</Text>
       </View>
-      {ReducerState?.chatUser.length == 0 && (
-        <Text style={{ alignSelf: "center", marginTop: "40%", fontSize: 25, fontWeight: "bold", color: "grey" }}>You have no conversations</Text>
-      )}
-      <FlatList
-        data={ReducerState?.chatUser}
-        renderItem={({ item }) => Item(item)}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.FlatListStyle}
-        showsVerticalScrollIndicator={false}
-      />
+      {/* {ReducerState?.chatUser.length != 0 ?
+    
+    :  <Text style={{ alignSelf: "center", marginTop: "40%", fontSize: 25, fontWeight: "bold", color: "grey" }}>You have no conversations</Text>
+  } */}
+    
+  <FlatList
+  data={ReducerState?.chatUser}
+  renderItem={({ item }) => Item(item)}
+  keyExtractor={(item, index) => index.toString()}
+  style={styles.FlatListStyle}
+  showsVerticalScrollIndicator={false}
+/> 
       <Modal
         animationType="slide"
         transparent={true}
@@ -289,7 +304,9 @@ const Chat = props => {
 
         <View
           style={styles.mainView}>
-          {ReducerState?.showLottie && <View style={{ height: "30%", width: "70%", alignSelf: "center", marginTop: "50%", position: "absolute", zIndex: 3 }}><LottieView source={require('../../Assets/animation.json')} autoPlay loop={false} style={{ zIndex: 1 }}
+          {ReducerState?.showLottie && 
+          <View style={{ height: "30%", width: "70%", alignSelf: "center", marginTop: "50%", position: "absolute", zIndex: 3 }}>
+            <LottieView source={require('../../Assets/animation.json')} autoPlay loop={false} style={{ zIndex: 1 }}
             onAnimationFinish={() => {
               SetLoader(true)
               store.dispatch(SET_SHOW_MODAL(false))
