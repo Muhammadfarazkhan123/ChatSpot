@@ -32,11 +32,11 @@ const Data = [
 
 const Settings = props => {
   const { user } = store.getState().UserReducer
-  // console.log(user.photoURL,"userreducer")
   const logout = async () => {
     LoginManager.logOut();
     auth().signOut();
     await GoogleSignin.signOut();
+    console.log(user,"userreducer")
     props.navigation.navigate('Chat');
   };
   return (

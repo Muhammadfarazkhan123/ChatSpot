@@ -45,6 +45,7 @@ const ChatBox = (props) => {
   const Details = store.getState()?.ActiveChatReducer?.ChatUser
   useEffect(() => {
     if (isthisUpdate) {
+      console.log('useeffact')
       store.dispatch(ChatBoxAction());
       store.subscribe(() => {
         SetReducerState(store.getState().ChatBoxReducer);
@@ -53,22 +54,22 @@ const ChatBox = (props) => {
         SetisthisUpdate(false);
       });
     }
-    var typeVar = false
-    firestore().collection('Users').doc(UserUid).onSnapshot(data => {
-      data.data().ChatId.filter(val => {
-        if (val.ChatKey === reducerState?.key) {
-          // console.log(val.Istyping, "is typing")
-          if (val.Istyping) {
-            typeVar = true
-          }
-          else {
-            typeVar = false
-          }
-        }
-        // console.log(typeVar, "typevar")
-        Set_Typing(typeVar)
-      })
-    })
+    // var typeVar = false
+    // firestore().collection('Users').doc(UserUid).onSnapshot(data => {
+    //   data?.data()?.ChatId?.filter(val => {
+    //     if (val.ChatKey === reducerState?.key) {
+    //       // console.log(val.Istyping, "is typing")
+    //       if (val.Istyping) {
+    //         typeVar = true
+    //       }
+    //       else {
+    //         typeVar = false
+    //       }
+    //     }
+    //     // console.log(typeVar, "typevar")
+    //     Set_Typing(typeVar)
+    //   })
+    // })
 
   }, []);
   // console.log(groupReducer, 'groupred');
@@ -77,7 +78,7 @@ const ChatBox = (props) => {
   };
 
   const SetTyping = text => {
-    store.dispatch(Typing(text));
+    // store.dispatch(Typing(text));
     store.dispatch(SET_MESSAGE(text));
   };
 
@@ -175,7 +176,7 @@ const ChatBox = (props) => {
               }}
 
               onFocus={() => { SetEmoji(false) }}
-              onEndEditing={store.dispatch(EndTyping())}
+              // onEndEditing={store.dispatch(EndTyping())}
               multiline
               value={reducerState?.message}
             />

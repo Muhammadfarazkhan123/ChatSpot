@@ -58,7 +58,6 @@ const Chat = props => {
     console.log('run');
     AppState.addEventListener('change', _handleAppStateChange)
 
-    store.dispatch(AllUserAction());
 
     store.subscribe(() => {
       // console.log('subscribe dashboard')
@@ -112,7 +111,8 @@ const Chat = props => {
           style={styles.MainListView}
           onPress={() => {
             GroupChatStart(Item);
-          }}>
+          }}
+          >
 
           <View style={styles.ListView}>
             <Image source={{ uri: Item.GroupImage }} style={styles.ListImg} />
@@ -139,10 +139,10 @@ const Chat = props => {
     }
     if (!Item.hasOwnProperty('MemberUid')) {
     const UserUid = store?.getState()?.UserReducer?.user?.uid;
-      // console.log(Item.ChatId,"item check")
+      // console.log(Item,"item check")
       let lastMsg
       let time
-      Item.ChatId.filter(v=>{
+      Item?.ChatId.filter(v=>{
         if(v.Uid === UserUid){
           lastMsg=v.lastMsg
           time=v.Time
@@ -163,7 +163,7 @@ const Chat = props => {
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item?.displayName}</Text>
-        <Text style={{ color: "grey" }}>{moment(time).fromNow()}</Text>
+        <Text style={{ color: "grey" }}>{moment(time).fromNow(true)}</Text>
             </View>
 
 

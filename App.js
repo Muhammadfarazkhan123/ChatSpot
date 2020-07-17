@@ -7,6 +7,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import SplashScreen from 'react-native-splash-screen'
 import { ChatDashboard } from './src/Redux/Actions/ChatDashboardAction'
+import {AllUserAction} from './src/Redux/Actions/AllUserAction'
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from "react-native-push-notification"
 
@@ -16,13 +17,13 @@ const App = () => {
   const checkUser = () => {
     
     auth().onAuthStateChanged(user => {
+      store.dispatch({
+        type: 'USER',
+        user,
+      });
+      setUser(user);
       if (user) {
-        setUser(user);
         console.log(user, 'user hai');
-        store.dispatch({
-          type: 'USER',
-          user,
-        });
         console.log("app js User")
         const UserObj = {
           displayName: user.displayName,
@@ -34,6 +35,8 @@ const App = () => {
         console.log(user, 'uid');
         checkPermission(user)
         store.dispatch(ChatDashboard());
+    store.dispatch(AllUserAction());
+
         firestore()
         .collection('Users')
         .doc(user?.uid)

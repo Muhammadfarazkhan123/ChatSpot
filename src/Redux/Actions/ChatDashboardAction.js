@@ -20,7 +20,7 @@ export const ChatDashboard = () => {
   const UserUid = store?.getState()?.UserReducer?.user?.uid;
   return dispatch => {
     let UsersDetail = store?.getState()?.ChatDashboardReducer?.usersDetail;
-    let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
+    // let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
     let GroupUser = store?.getState()?.ChatDashboardReducer?.GroupUser;
     console.log(UserUid,"userUid")
     console.log(store?.getState()?.UserReducer?.user,"userUid data")
@@ -42,22 +42,25 @@ export const ChatDashboard = () => {
       .collection('Users')
       .doc(UserUid)
       .onSnapshot(async UserData => {
-        ChatUser = [];
-        GroupUser = [];
-        ChatId=UserData?.data()?.ChatId
+    let ChatUserArr = [];
+        let ChatId=UserData?.data()?.ChatId
         // UserData?.data()?.ChatId?.map(value => {
-        //   // console.log(value, 'value');
+        //   console.log(ChatUserArr, 'ChatUser');
         //   if (value.hasOwnProperty('MemberUid')) {
-        //     ChatUser.push(value);
-        //     dispatch(SET_CHAT_USER(ChatUser));
+        //     ChatUserArr.push(value);
+        //     dispatch(SET_CHAT_USER(ChatUserArr));
         //   } else if (!value.hasOwnProperty('MemberUid')) {
+        //   console.log(ChatUserArr, 'ChatUser2');
+
         //     firestore()
         //       .collection('Users')
         //       .doc(value.Uid)
         //       .onSnapshot(Detail => {
-        //         // console.log(Detail.data(),"detail on online")
-        //         ChatUser.push(Detail.data());
-        //     dispatch(SET_CHAT_USER(ChatUser));
+        //         console.log(Detail.data(),"detail on online")
+        //         ChatUserArr.push(Detail.data());
+        //   console.log(ChatUserArr, 'ChatUser3');
+
+        //     dispatch(SET_CHAT_USER(ChatUserArr));
 
         //       });
         //     }
@@ -65,23 +68,45 @@ export const ChatDashboard = () => {
         //     // dispatch(SET_CHAT_USER(ChatUser));
         //   });
 
-      for (let i = 0; i < ChatId.length; i++) {
+      for (let i = 0; i < ChatId?.length; i++) {
           // console.log(ChatId[i], 'value');
+          console.log(ChatUserArr,"chatuser hai yeh ")
           let value=ChatId[i]
-        if (value.hasOwnProperty('MemberUid')) {
-                ChatUser.push(value);
+          if (value.hasOwnProperty('MemberUid')) {
+            ChatUserArr.push(value);
               } else if (!value.hasOwnProperty('MemberUid')) {
+                // ChatUserArr = [];
+
                 await firestore()
                 .collection('Users')
                 .doc(value.Uid)
                 .onSnapshot(Detail => {
+                  let ind
+                  // console.log(ChatUserArr,"chatuser hai yeh 2")
                   // console.log(Detail.data(),"detail on online")
-                  ChatUser.push({...Detail.data()});
+                  let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
+                  console.log(ChatUser,"ChatUser")
+                  ChatUser.map((v,i)=>{
+                    if(v.UserUid === value.Uid){
+                      ind=i
+                      // console.log(ind,"index2")
+                    }
+                  })
+                  // console.log(ind,"index1")
+                  if(ind){
+                    ChatUserArr.splice(ind,1,Detail.data())
+                    dispatch(SET_CHAT_USER(ChatUserArr));
+                  }else{
+
+                    ChatUserArr.push({...Detail.data()});
+                    dispatch(SET_CHAT_USER(ChatUserArr));
+
+                  }
                 });
               }
             }
-            console.log(ChatUser,"chatuser")
-            dispatch(SET_CHAT_USER(ChatUser));
+            // ChatUser=ChatUserArr
+            // console.log(ChatUserArr,"chatuser")
           });
   };
 };

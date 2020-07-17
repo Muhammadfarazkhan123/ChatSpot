@@ -13,8 +13,9 @@ export const AllUserAction = () => {
       .onSnapshot(querySnapshot => {
         UsersDetail = [];
         SearchArr = [];
-        querySnapshot.forEach(UsersData => {
-
+        // console.log(querySnapshot,"querySnapshot")
+        querySnapshot?.forEach(UsersData => {
+          // console.log(console.log(UsersData))
           if (UsersData.data().UserUid != UserUid) {
             UsersDetail.push(UsersData.data());
             SearchArr.push(UsersData.data());
