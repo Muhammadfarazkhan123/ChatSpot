@@ -291,7 +291,7 @@ const Chat = props => {
   style={styles.FlatListStyle}
   showsVerticalScrollIndicator={false}
 /> 
-      <Modal
+     {ReducerState?.showModal && <Modal
         animationType="slide"
         transparent={true}
         visible={ReducerState?.showModal}
@@ -319,7 +319,7 @@ const Chat = props => {
             <TouchableOpacity
               style={styles.CloseButton}
               onPress={() => {
-                store.dispatch(SET_SHOW_MODAL(!ReducerState.showModal));
+                store.dispatch(SET_SHOW_MODAL(false));
                 store.dispatch(SET_GROUP_IMAGE(""))
                 store.dispatch(SET_GROUP_NAME(""))
               }}>
@@ -390,7 +390,7 @@ const Chat = props => {
 
 
         </View>
-      </Modal>
+      </Modal>}
 
       <TouchableOpacity
         style={styles.GroupBUtton}

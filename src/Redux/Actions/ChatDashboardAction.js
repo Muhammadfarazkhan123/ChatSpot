@@ -85,7 +85,7 @@ export const ChatDashboard = () => {
                   // console.log(ChatUserArr,"chatuser hai yeh 2")
                   // console.log(Detail.data(),"detail on online")
                   let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
-                  console.log(ChatUser,"ChatUser")
+                  // console.log(ChatUser,"ChatUser")
                   ChatUser.map((v,i)=>{
                     if(v.UserUid === value.Uid){
                       ind=i
@@ -93,9 +93,21 @@ export const ChatDashboard = () => {
                     }
                   })
                   // console.log(ind,"index1")
-                  if(ind){
-                    ChatUserArr.splice(ind,1,Detail.data())
-                    dispatch(SET_CHAT_USER(ChatUserArr));
+                  // var Indexchat=[...ChatUser]
+                  // for (let index = 0; index < ChatUserArr.length; index++) {
+                  //   // const element = array[index];
+                  //   if(Indexchat[index].UserUid === value.Uid){
+                  //     ind=index
+                  //     console.log(ind,"index2")
+                  //   }
+                  // }
+                  // console.log(ind,'index hai yeh')
+                  if(ind != undefined){
+                    console.log(ind,"ye kab chala")
+                    ChatUser.splice(ind,1,Detail.data())
+                    dispatch(SET_CHAT_USER(ChatUser));
+
+
                   }else{
 
                     ChatUserArr.push({...Detail.data()});
@@ -106,7 +118,8 @@ export const ChatDashboard = () => {
               }
             }
             // ChatUser=ChatUserArr
-            // console.log(ChatUserArr,"chatuser")
+            console.log(ChatUserArr,"chatusercheck")
+
           });
   };
 };
