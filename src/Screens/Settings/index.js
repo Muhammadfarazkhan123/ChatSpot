@@ -40,7 +40,7 @@ const Settings = props => {
     props.navigation.navigate('Chat');
   };
   return (
-    <View>
+    <View style={{flex:1}}>
       <View style={styles.ProfileView}>
         <Image source={{ uri: user.photoURL }} style={styles.ProfileImage} />
         {/* <Image source={user}/> */}

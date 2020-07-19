@@ -354,38 +354,47 @@ export const Typing = Text => {
     let index;
 
     if (Text != '') {
+    console.log('1 typing');
+
       if (!states.firstChat) {
+    console.log('2 typing');
+
         if (!states.newChat) {
+    console.log('3 typing');
+          console.log(states.key)
           firestore()
-            .collection('Users')
-            .doc(ActiveUserUid).get()
-            .then(val => {
-              CHATID = [...val?.data().ChatId];
-              // console.log(CHATID, 'hhhhh');
-              const filter = CHATID?.filter((v, i) => {
-                if (v.Uid === UserUid) {
-                  index = i;
-                }
-              })
-              CHATID[index].Istyping = true;
-              // console.log(CHATID, 'chatid');
-              firestore()
-                .collection('Users')
-                .doc(ActiveUserUid)
-                .update({ ChatId: CHATID });
-              // console.log(CHATID[index].Istyping, 'true');
+            .collection('chat')
+            .doc(states.key).update({
+              [UserUid]:true
+            })
+            
+            
+            // get()
+            // .then(val => {
+            //   CHATID = [...val?.data().ChatId];
+            //   // console.log(CHATID, 'hhhhh');
+            //   const filter = CHATID?.filter((v, i) => {
+            //     if (v.Uid === UserUid) {
+            //       index = i;
+            //     }
+            //   })
+            //   CHATID[index].Istyping = true;
+            //   // console.log(CHATID, 'chatid');
+            //   firestore()
+            //     .collection('Users')
+            //     .doc(ActiveUserUid)
+            //     .update({ ChatId: CHATID });
+            //   console.log(CHATID[index].Istyping, 'true');
 
 
-              // setTimeout(()=>{
-              //   CHATID[index].Istyping = false;
-              //   console.log(CHATID, 'chatid');
-              //   firestore()
-              //     .collection('Users')
-              //     .doc(ActiveUserUid)
-              //     .update({ ChatId: CHATID });
-              //   console.log(CHATID[index].Istyping, 'false');
-              // },3000)
-            });
+              setTimeout(()=>{
+                firestore()
+                .collection('chat')
+                .doc(states.key).update({
+                  [UserUid]:false
+                })
+              },2000)
+            // });
         }
       }
     };

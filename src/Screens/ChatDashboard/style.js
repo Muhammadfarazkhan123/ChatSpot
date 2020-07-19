@@ -186,7 +186,8 @@ MainList:{
 flexDirection:"row",
 justifyContent:"space-between",
 paddingVertical:wp(2),
-paddingHorizontal:wp(3)
+paddingHorizontal:wp(3),
+alignItems:"center"
 },
 GroupListView:{
   flexDirection:"row",

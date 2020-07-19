@@ -44,7 +44,8 @@ const ChatBox = (props) => {
   const ActiveUserUid = !store.getState().GroupReducer.group && store.getState()?.ActiveChatReducer?.ChatUser?.UserUid;
   const Details = store.getState()?.ActiveChatReducer?.ChatUser
   useEffect(() => {
-    if (isthisUpdate) {
+
+    // if (isthisUpdate) {
       console.log('useeffact')
       store.dispatch(ChatBoxAction());
       store.subscribe(() => {
@@ -53,12 +54,12 @@ const ChatBox = (props) => {
         console.log("subscribe chatbox")
         SetisthisUpdate(false);
       });
-    }
+    // }
     // var typeVar = false
     // firestore().collection('Users').doc(UserUid).onSnapshot(data => {
     //   data?.data()?.ChatId?.filter(val => {
     //     if (val.ChatKey === reducerState?.key) {
-    //       // console.log(val.Istyping, "is typing")
+    //       console.log(val?.Istyping, "is typing")
     //       if (val.Istyping) {
     //         typeVar = true
     //       }
@@ -66,10 +67,25 @@ const ChatBox = (props) => {
     //         typeVar = false
     //       }
     //     }
-    //     // console.log(typeVar, "typevar")
+    //     console.log(typeVar, "typevar")
     //     Set_Typing(typeVar)
     //   })
     // })
+
+    firestore().collection('chat').doc(reducerState?.key).onSnapshot(TypingData=>{
+      console.log(TypingData.data(),'typing data')
+        console.log(ActiveUserUid,"ActiveUser")   
+        // let CheckUid=ActiveUserUid
+        console.log(TypingData.data()?.[ActiveUserUid],"check it1")
+
+      if(TypingData.data()?.[ActiveUserUid]){
+        console.log(TypingData.data()?.ActiveUserUid,"check it")
+        Set_Typing(true)
+      }else{
+        Set_Typing(false)
+
+      }
+    })
 
   }, []);
   // console.log(groupReducer, 'groupred');
@@ -78,7 +94,7 @@ const ChatBox = (props) => {
   };
 
   const SetTyping = text => {
-    // store.dispatch(Typing(text));
+    store.dispatch(Typing(text));
     store.dispatch(SET_MESSAGE(text));
   };
 
@@ -93,7 +109,7 @@ const ChatBox = (props) => {
         ref={ref => {
           SetScrollRef(ref);
         }}
-        // onContentSizeChange={() => scrollRef.scrollToEnd({ animated: true })}
+        onContentSizeChange={() => scrollRef.scrollToEnd({ animated: true })}
         style={styles.MsgScrolView}
         contentContainerStyle={{ paddingBottom: wp(5) }}
       >
@@ -102,35 +118,35 @@ const ChatBox = (props) => {
             <View style={{ marginBottom: wp(3) }}>
               <View
                 style={{
-                  backgroundColor: v.Uid == UserUid ? 'rgb(28, 98, 219)' : 'rgb(235, 238, 244)',
+                  backgroundColor: v?.Uid == UserUid ? 'rgb(28, 98, 219)' : 'rgb(235, 238, 244)',
                   maxHeight: hp('20%'),
                   minHeight: hp('6%'),
                   marginTop: hp('1.5%'),
                   maxWidth: wp('70%'),
                   minWidth: wp('25%'),
-                  alignSelf: v.Uid == UserUid ? 'flex-end' : 'flex-start',
+                  alignSelf: v?.Uid == UserUid ? 'flex-end' : 'flex-start',
                   padding: wp('2%'),
-                  borderColor: v.Uid == UserUid ? 'black' : '#d2d2d2',
-                  borderBottomLeftRadius: v.Uid == UserUid ? 50 : 0,
+                  borderColor: v?.Uid == UserUid ? 'black' : '#d2d2d2',
+                  borderBottomLeftRadius: v?.Uid == UserUid ? 50 : 0,
                   borderTopLeftRadius: 50,
                   borderTopRightRadius: 50,
-                  borderBottomRightRadius: v.Uid != UserUid ? 50 : 0,
+                  borderBottomRightRadius: v?.Uid != UserUid ? 50 : 0,
                   paddingHorizontal: wp(6),
                   paddingVertical: wp(5),
                 }}
                 key={i}>
                 {groupReducer?.group && <Text
                   style={{
-                    color: v.Uid == UserUid ? 'white' : 'black',
+                    color: v?.Uid == UserUid ? 'white' : 'black',
                     fontWeight: 'bold',
                   }}
 
                 >
-                  {v.Uid == UserUid ? 'You:' : v.name + ':'}
+                  {v?.Uid == UserUid ? 'You:' : v.name + ':'}
                 </Text>}
                 <Text
                   style={{
-                    color: v.Uid == UserUid ? 'white' : 'black',
+                    color: v?.Uid == UserUid ? 'white' : 'black',
                     textAlign: "left",
 
                   }}>
@@ -141,7 +157,7 @@ const ChatBox = (props) => {
               <Text
                 style={{
                   color: 'grey',
-                  textAlign: v.Uid == UserUid ? 'right' : "left",
+                  textAlign: v?.Uid == UserUid ? 'right' : "left",
                   fontWeight: "bold"
                 }}
 
@@ -154,6 +170,7 @@ const ChatBox = (props) => {
         {/* {checkTyping &&<View>
           <Text>typing</Text>
         </View>} */}
+        {console.log(checkTyping,"checking typing")}
         {checkTyping && <View style={{ zIndex: 3 }}>
           <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%" }}
           /></View>}

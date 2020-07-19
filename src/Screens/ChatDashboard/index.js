@@ -279,24 +279,24 @@ const Chat = props => {
         />
         <Text style={styles.HeadStyle}>Messages</Text>
       </View>
-      {/* {ReducerState?.chatUser.length != 0 ?
-    
-    :  <Text style={{ alignSelf: "center", marginTop: "40%", fontSize: 25, fontWeight: "bold", color: "grey" }}>You have no conversations</Text>
-  } */}
-    
-  <FlatList
+      {ReducerState?.chatUser.length != 0 ?
+    <FlatList
   data={ReducerState?.chatUser}
   renderItem={({ item }) => Item(item)}
   keyExtractor={(item, index) => index.toString()}
   style={styles.FlatListStyle}
   showsVerticalScrollIndicator={false}
 /> 
+    :  <Text style={{ alignSelf: "center", marginTop: "40%", fontSize: 25, fontWeight: "bold", color: "grey" }}>You have no conversations</Text>
+  }
+    
+  
      {ReducerState?.showModal && <Modal
         animationType="slide"
         transparent={true}
         visible={ReducerState?.showModal}
         onRequestClose={() => {
-          alert('Modal has been closed.');
+          // alert('Modal has been closed.');
           store.dispatch(SET_SHOW_MODAL(!ReducerState.showModal));
 
         }}>
