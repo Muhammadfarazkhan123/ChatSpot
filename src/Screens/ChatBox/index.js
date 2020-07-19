@@ -72,6 +72,11 @@ const ChatBox = (props) => {
     //   })
     // })
 
+    
+
+  }, []);
+  // console.log(groupReducer, 'groupred');
+  useEffect(()=>{
     firestore().collection('chat').doc(reducerState?.key).onSnapshot(TypingData=>{
       console.log(TypingData.data(),'typing data')
         console.log(ActiveUserUid,"ActiveUser")   
@@ -86,9 +91,7 @@ const ChatBox = (props) => {
 
       }
     })
-
-  }, []);
-  // console.log(groupReducer, 'groupred');
+  })
   const send = () => {
     store.dispatch(SendAction(scrollRef));
   };
@@ -170,7 +173,6 @@ const ChatBox = (props) => {
         {/* {checkTyping &&<View>
           <Text>typing</Text>
         </View>} */}
-        {console.log(checkTyping,"checking typing")}
         {checkTyping && <View style={{ zIndex: 3 }}>
           <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%" }}
           /></View>}
