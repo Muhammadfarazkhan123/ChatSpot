@@ -32,8 +32,9 @@ export const ChatBoxAction = () => {
       .collection('Users')
       .doc(UserUid)
       .onSnapshot(DocData => {
-        console.log(DocData.data(), 'data');
-        if (DocData.data()?.ChatId) {
+        console.log(DocData?.data(), 'data');
+        if (DocData?.data()?.ChatId) {
+          dispatch(SET_FIRST_CHAT(false));
           if (
             store
               .getState()
@@ -50,9 +51,10 @@ export const ChatBoxAction = () => {
               .orderBy('timestamp')
               .onSnapshot(v => {
                 MsgArr = [];
-                v.docs.forEach(MsgData => {
+                v?.docs.forEach(MsgData => {
                   MsgArr.push(MsgData.data());
                 });
+                console.log('msg arrrr')
                 dispatch(SET_MSG_ARR(MsgArr));
               });
           } else if (
@@ -60,21 +62,24 @@ export const ChatBoxAction = () => {
               .getState()
               ?.ActiveChatReducer?.ChatUser?.hasOwnProperty('MemberUid')
           ) {
-            const Filter = DocData.data()?.ChatId.filter(v => {
+            const Filter = DocData?.data()?.ChatId.filter(v => {
               return v?.Uid == ActiveUserUid;
             });
             console.log(
               store.getState()?.ActiveChatReducer?.ChatUser.ChatKey,
               'ActiveUserUid',
             );
-            // console.log(Filter, 'filterdata');
-            // console.log(Filter.length, 'filternnn');
+            console.log(Filter, 'filterdata');
+            console.log(Filter.length, 'filternnn');
             if (Filter.length == 0) {
               dispatch(SET_NEW_CHAT(true));
               console.log('no uid ');
             } else {
-              Filter.map(item => {
+              // Filter.map(item => {
                 // SetKey(item?.ChatKey);
+              dispatch(SET_NEW_CHAT(false));
+
+                const item=Filter[0]
                 dispatch(SET_KEY(item?.ChatKey));
                 // if (isthisUpdate) {
                 firestore()
@@ -84,20 +89,39 @@ export const ChatBoxAction = () => {
                   .orderBy('timestamp')
                   .onSnapshot(v => {
                     MsgArr = [];
-                    v.docs.forEach(MsgData => {
-                      MsgArr.push(MsgData.data());
+                    v?.docs.forEach(MsgData => {
+                      MsgArr.push(MsgData?.data());
                     });
                     dispatch(SET_MSG_ARR(MsgArr));
                   });
+                  firestore().collection('chat').doc(item?.ChatKey).onSnapshot(TypingData=>{
+                    console.log('TypingData')
+                    console.log(TypingData?.data(),'typing data')
+              
+                      console.log(ActiveUserUid,"ActiveUser")   
+                      // let CheckUid=ActiveUserUid
+                      console.log(TypingData?.data()?.[ActiveUserUid],"check it1")
+              
+                    if(TypingData?.data()?.[ActiveUserUid]){
+                      // console.log(TypingData.data()?.ActiveUserUid,"check it")
+                      // Set_Typing(true)
+                      dispatch(SET_TYPING(true))
+                    }else{
+                      // Set_Typing(false)
+                      dispatch(SET_TYPING(false))
 
+              
+                    }
+                  })
                 // SetisthisUpdate(false);
                 // }
                 console.log(item?.ChatKey, 'item?.ChatKey');
-              });
+              // });
             }
           }
         } else {
           dispatch(SET_FIRST_CHAT(true));
+          // alert('check else working')
           console.log('no Chatid ');
         }
       });
@@ -145,7 +169,7 @@ export const SendAction = (scrollRef) => {
       firestore()
         .collection('Users')
         .doc(UserUid)
-        .set({
+         .set({
           ChatId: [
             {
               Uid: ActiveUserUid,
@@ -158,6 +182,7 @@ export const SendAction = (scrollRef) => {
             },
           ],
         }, { merge: true });
+       
       firestore()
         .collection('Users')
         .doc(ActiveUserUid)
@@ -226,12 +251,14 @@ export const SendAction = (scrollRef) => {
       dispatch(SET_KEY(PushKey));
       dispatch(SET_NEW_CHAT(false));
     } else if (!states.firstChat && !states.newChat) {
-      console.log('else hai');
+      console.log(states.key,'else hai');
+      
       firestore()
         .collection('chat')
         .doc(states.key)
         .collection('Chats')
         .add(chatObj);
+
 
       firestore()
         .collection('Notification').add({
@@ -239,6 +266,8 @@ export const SendAction = (scrollRef) => {
           Uid: ActiveUserUid,
           Msg: states.message
         })
+     if(!store.getState().GroupReducer.group){
+       console.log("ye wala chala pehla")
       var index;
       var CHATID
       firestore()
@@ -259,7 +288,6 @@ export const SendAction = (scrollRef) => {
             .collection('Users')
             .doc(UserUid)
             .update({ ChatId: CHATID });
-          console.log(CHATID[index].lastMsg, 'msg last');
         }).then(set=>{
           var index1;
       var CHATID1
@@ -284,6 +312,25 @@ export const SendAction = (scrollRef) => {
           console.log(CHATID1[index1].lastMsg, 'msg last');
         })
         })
+     }else if(store.getState().GroupReducer.group){
+      console.log("ye wala chala dosrA")
+      firestore()
+      .collection('Users')
+      .doc(UserUid).get()
+      .then(val => {
+        console.log(val.data(),"data dosra")
+        val?.data()?.ChatId.map(v=>{
+          console.log(v.hasOwnProperty('MemberUid'),"check member")
+          if(v.hasOwnProperty('MemberUid')){
+            console.log(v?.ChatKey,"group data")
+            firestore().collection('chat').doc(v?.ChatKey).update({
+              lastMsg:states.message,
+              Time : new Date().getTime()
+            })
+          }
+        })
+      })
+     }
 
       
 
@@ -342,6 +389,8 @@ export const SET_EMOJI = emoji => {
     disptch(SET_MESSAGE(Msg))
   }
 }
+
+
 
 export const Typing = Text => {
   const UserUid = store.getState()?.UserReducer?.user?.uid;

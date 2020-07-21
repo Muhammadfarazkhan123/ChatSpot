@@ -7,7 +7,8 @@ import {
   GROUP_ARR,
   SHOW_MODAL,
   SHOW_LOTIE,
-  SHOW_LOADER
+  SHOW_LOADER,
+  LAST_MSG
 } from '../Actions/type';
 const InitialState = {
   usersDetail: [],
@@ -52,6 +53,9 @@ const reducer = (state = InitialState, action) => {
     }
     case SHOW_LOADER: {
       return {...state, showLoader: action.showLoader};
+    }
+    case LAST_MSG: {
+      return {...state, lastMsg: action.lastMsg};
     }
     default: {
       return state;

@@ -15,3 +15,4 @@ export const GROUP_IMG = 'GROUP_IMG';
 export const SHOW_MODAL='SHOW_MODAL'
 export const SHOW_LOTIE='SHOW_LOTIE'
 export const SHOW_LOADER='SHOW_LOADER'
+export const LAST_MSG='LAST_MSG'

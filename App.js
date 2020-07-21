@@ -23,8 +23,8 @@ const App = () => {
       });
       setUser(user);
       if (user) {
-        console.log(user, 'user hai');
-        console.log("app js User")
+        // console.log(user, 'user hai');
+        // console.log("app js User")
         const UserObj = {
           displayName: user.displayName,
           PhotoUrl: user.photoURL,
@@ -32,7 +32,7 @@ const App = () => {
           UserUid: user.uid,
           // IsOnline:false
         };
-        console.log(user, 'uid');
+        // console.log(user, 'uid');
         checkPermission(user)
         store.dispatch(ChatDashboard());
     store.dispatch(AllUserAction());
@@ -51,7 +51,7 @@ const App = () => {
     checkUser();
     // messaging().onMessage((msg)=>{console.log(msg,"foreground")})
     messaging().onMessage(async remoteMessage => {
-      console.log(JSON.stringify(remoteMessage), "check forground");
+      // console.log(JSON.stringify(remoteMessage), "check forground");
       PushNotification.localNotification({
         title: remoteMessage.notification.title,
         message:  remoteMessage.notification.body

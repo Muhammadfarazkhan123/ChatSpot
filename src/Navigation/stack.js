@@ -41,12 +41,12 @@ const Navigation = props => {
     const UserName = store?.getState()?.ActiveChatReducer?.ChatUser
       ?.displayName;
     const photouri = store?.getState()?.ActiveChatReducer?.ChatUser?.PhotoUrl;
-    console.log(store?.getState()?.ActiveChatReducer?.ChatUser, 'chatuser');
+    // console.log(store?.getState()?.ActiveChatReducer?.ChatUser, 'chatuser');
     const arr = UserName?.split(' ');
     var name = arr
       ?.map(item => item.charAt(0).toUpperCase() + item.slice(1))
       .join(' ');
-    console.log(name, 'name');
+    // console.log(name, 'name');
 
     return (
       <Userstack.Navigator>
@@ -88,10 +88,9 @@ const Navigation = props => {
   const ChatDashboardStackNavigator = () => {
     const { user } = props;
     const chatUser = store?.getState()?.ActiveChatReducer?.ChatUser;
-    const UserName = store?.getState()?.ActiveChatReducer?.ChatUser
-      ?.displayName;
+    const UserName = store?.getState()?.ActiveChatReducer?.ChatUser?.displayName;
     const photouri = store?.getState()?.ActiveChatReducer?.ChatUser?.PhotoUrl;
-    console.log(store?.getState()?.ActiveChatReducer?.ChatUser, 'chatuser');
+    // console.log(store?.getState()?.ActiveChatReducer?.ChatUser, 'chatuser');
     const arr = UserName?.split(' ');
     var name = arr
       ?.map(item => item.charAt(0).toUpperCase() + item.slice(1))
@@ -103,9 +102,9 @@ const Navigation = props => {
           name="ChatDashboard"
           component={ChatDashboard}
           options={() => ({
-            headerLeft: () => (
-              <Image source={{ uri: user.photoURL }} style={styles.stackImage} />
-            ),
+            // headerLeft: () => (
+            //   <Image source={{ uri: user.photoURL }} style={styles.stackImage} />
+            // ),
             headerShown: false,
           })}
         />
@@ -119,44 +118,44 @@ const Navigation = props => {
             // title: name,
             headerStyle: styles.headerStyling,
             headerShown: false,
-            headerTitle: () => {
-              if (chatUser.hasOwnProperty('MemberUid')) {
-                return (
-                  <View style={{ flexDirection: 'row', flex: 1 }}>
-                    <Image
-                      source={{ uri: chatUser?.GroupImage }}
-                      style={styles.stackImage}
-                    />
-                    <View>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          marginTop: '10%',
-                        }}>
-                        {chatUser?.groupName}
-                      </Text>
-                      {/* <Text>Active Now</Text> */}
-                    </View>
-                  </View>
-                );
-              } else if (!chatUser.hasOwnProperty('MemberUid')) {
-                return (
-                  <View style={{ flexDirection: 'row', flex: 1 }}>
-                    <Image
-                      source={{ uri: chatUser?.PhotoUrl }}
-                      style={styles.stackImage}
-                    />
-                    <View>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
-                        {name}
-                      </Text>
-                      <Text>Active Now</Text>
-                    </View>
-                  </View>
-                );
-              }
-            },
+            // headerTitle: () => {
+            //   if (chatUser.hasOwnProperty('MemberUid')) {
+            //     return (
+            //       <View style={{ flexDirection: 'row', flex: 1 }}>
+            //         <Image
+            //           source={{ uri: chatUser?.GroupImage }}
+            //           style={styles.stackImage}
+            //         />
+            //         <View>
+            //           <Text
+            //             style={{
+            //               fontSize: 20,
+            //               fontWeight: 'bold',
+            //               marginTop: '10%',
+            //             }}>
+            //             {chatUser?.groupName}
+            //           </Text>
+            //           {/* <Text>Active Now</Text> */}
+            //         </View>
+            //       </View>
+            //     );
+            //   } else if (!chatUser.hasOwnProperty('MemberUid')) {
+            //     return (
+            //       <View style={{ flexDirection: 'row', flex: 1 }}>
+            //         <Image
+            //           source={{ uri: chatUser?.PhotoUrl }}
+            //           style={styles.stackImage}
+            //         />
+            //         <View>
+            //           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
+            //             {name}
+            //           </Text>
+            //           <Text>Active Now</Text>
+            //         </View>
+            //       </View>
+            //     );
+            //   }
+            // },
           })}
         />
       </Stack.Navigator>

@@ -23,7 +23,7 @@ import {
   SET_MESSAGE,
   Typing,
   EndTyping,
-  SET_EMOJI
+  SET_EMOJI,
 } from '../../Redux/Actions/ChatBoxAction';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Header from "../../Components/Header/index"
@@ -71,27 +71,37 @@ const ChatBox = (props) => {
     //     Set_Typing(typeVar)
     //   })
     // })
+      console.log(store.getState()?.ChatBoxReducer,"reducerState?.key")
 
     
 
   }, []);
+  // console.log(reducerState?.firstChat === false,"check both")
+  //     console.log(reducerState?.newChat === false,"new chat")
   // console.log(groupReducer, 'groupred');
-  useEffect(()=>{
-    firestore().collection('chat').doc(reducerState?.key).onSnapshot(TypingData=>{
-      console.log(TypingData.data(),'typing data')
-        console.log(ActiveUserUid,"ActiveUser")   
-        // let CheckUid=ActiveUserUid
-        console.log(TypingData.data()?.[ActiveUserUid],"check it1")
+  // useEffect(()=>{
+  //  if(!reducerState?.firstChat){
+  //    console.log('ye chala firt')
+  //   if(!reducerState?.newChat){
+  //    console.log('ye chala new')
 
-      if(TypingData.data()?.[ActiveUserUid]){
-        console.log(TypingData.data()?.ActiveUserUid,"check it")
-        Set_Typing(true)
-      }else{
-        Set_Typing(false)
-
-      }
-    })
-  })
+  //     firestore().collection('chat').doc(reducerState?.key).onSnapshot(TypingData=>{
+  //       console.log(TypingData.data(),'typing data')
+  //         console.log(ActiveUserUid,"ActiveUser")   
+  //         // let CheckUid=ActiveUserUid
+  //         console.log(TypingData.data()?.[ActiveUserUid],"check it1")
+  
+  //       if(TypingData.data()?.[ActiveUserUid]){
+  //         // console.log(TypingData.data()?.ActiveUserUid,"check it")
+  //         Set_Typing(true)
+  //       }else{
+  //         Set_Typing(false)
+  
+  //       }
+  //     })
+  //   }
+  //  }
+  // })
   const send = () => {
     store.dispatch(SendAction(scrollRef));
   };
@@ -138,14 +148,14 @@ const ChatBox = (props) => {
                   paddingVertical: wp(5),
                 }}
                 key={i}>
-                {groupReducer?.group && <Text
+                {groupReducer?.group && v?.Uid != UserUid && <Text
                   style={{
                     color: v?.Uid == UserUid ? 'white' : 'black',
                     fontWeight: 'bold',
                   }}
 
                 >
-                  {v?.Uid == UserUid ? 'You:' : v.name + ':'}
+                  { v.name + ':'}
                 </Text>}
                 <Text
                   style={{
@@ -173,7 +183,7 @@ const ChatBox = (props) => {
         {/* {checkTyping &&<View>
           <Text>typing</Text>
         </View>} */}
-        {checkTyping && <View style={{ zIndex: 3 }}>
+        {reducerState?.typing && <View style={{ zIndex: 3 }}>
           <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%" }}
           /></View>}
 

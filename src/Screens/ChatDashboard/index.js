@@ -46,13 +46,17 @@ import {
 } from '../../Redux/Actions/AllUserAction';
 import style from './style';
 import { set } from 'react-native-reanimated';
+import reducer from '../../Redux/Reducer/AuthReducer';
 
 const Chat = props => {
   const [DidUpdate, setDidUpdate] = useState(true);
   const [ReducerState, SetReducerState] = useState();
   const [Groupstate, setGroupstate] = useState();
   const [ImageSource, SetImageSource] = useState();
-  const [loader, SetLoader] = useState(false)
+  const [loader, SetLoader] = useState(false);
+  const [lastMsg,SetlastMsg]=useState()
+  const [Time,SetTime]=useState()
+
 
   useEffect(() => {
     console.log('run');
@@ -68,7 +72,18 @@ const Chat = props => {
     });
 
 
-    console.log(store.getState().ChatDashboardReducer, 'reducer');
+    // console.log(store.getState().ChatDashboardReducer.chatUser, 'reducer');
+    // store.getState().ChatDashboardReducer.chatUser.map(v=>{
+    //   // console.log(v,"check vv")
+    //   if(v.hasOwnProperty('MemberUid')){
+    //     firestore().collection('chat').doc(v.ChatKey).onSnapshot(data=>{
+    //       // console.log(data?.data(),"check this is data")
+    //       SetlastMsg(data?.data()?.lastMsg);
+    //       SetTime(data?.data()?.Time)
+    //       console.log(data.data(),"data.data()")
+    //     })
+    //   }
+    // })
   }, []);
 
 
@@ -77,12 +92,12 @@ const Chat = props => {
 
     console.log(NextAppState, "next state")
     if (NextAppState === 'active') {
-      console.log("online")
+      // console.log("online")
       firestore().collection('Users').doc(UserUid).update({ IsOnline: true })
 
     } else {
       alert(NextAppState)
-      console.log('offline')
+      // console.log('offline')
       firestore().collection('Users').doc(UserUid).update({ IsOnline: false })
 
     }
@@ -105,7 +120,11 @@ const Chat = props => {
   };
 
   const Item = Item => {
-    if (Item.hasOwnProperty('MemberUid')) {
+      // console.log(Item,"group Item")
+      if (Item.hasOwnProperty('MemberUid')) {
+     
+     
+      // console.log(ReducerState.lastMsg,"group Item")
       return (
         <TouchableOpacity
           style={styles.MainListView}
@@ -121,15 +140,15 @@ const Chat = props => {
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item.groupName}</Text>
-              <Text style={{ color: "grey" }}>5 min</Text>
+              <Text style={{ color: "grey" }}>{moment(ReducerState?.lastMsg?.TimeLastmsg).fromNow(true)}</Text>
             </View>
 
 
             <View style={styles.msgNotiView}>
-              <Text style={styles.LastMsgStyle}>you:kese ho</Text>
-              <View style={styles.msgNoti}>
+        <Text style={styles.LastMsgStyle}>{ReducerState?.lastMsg?.Lastmsg?.substring(0, 25)+"..."}</Text>
+              {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
-              </View>
+              </View> */}
             </View>
           </View>
 
@@ -142,12 +161,13 @@ const Chat = props => {
       // console.log(Item,"item check")
       let lastMsg
       let time
-      Item?.ChatId.filter(v=>{
+      Item?.ChatId?.filter(v=>{
         if(v.Uid === UserUid){
           lastMsg=v.lastMsg
           time=v.Time
         }
       })
+      // console.log(time,lastMsg,"check both")
       return (
         <TouchableOpacity
           style={styles.MainListView}
@@ -168,10 +188,10 @@ const Chat = props => {
 
 
             <View style={styles.msgNotiView}>
-        <Text style={styles.LastMsgStyle}>{lastMsg}</Text>
-              <View style={styles.msgNoti}>
+        <Text style={styles.LastMsgStyle}>{lastMsg?.substring(0,25)+"..."}</Text>
+              {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
-              </View>
+              </View> */}
             </View>
           </View>
 

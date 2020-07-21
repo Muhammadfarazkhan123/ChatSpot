@@ -9,7 +9,8 @@ import {
   GROUP_ARR,
   SHOW_MODAL,
   SHOW_LOTIE,
-  SHOW_LOADER
+  SHOW_LOADER,
+  LAST_MSG
 } from './type';
 import storage from '@react-native-firebase/storage';
 import {ActiveChat} from './ActiveChatAction';
@@ -45,7 +46,9 @@ export const ChatDashboard = () => {
     let ChatUserArr = [];
         let ChatId=UserData?.data()?.ChatId
         // UserData?.data()?.ChatId?.map(value => {
-        //   console.log(ChatUserArr, 'ChatUser');
+          console.log(UserData.data(), 'UserData.data()');
+          console.log(ChatId, 'ChatId');
+
         //   if (value.hasOwnProperty('MemberUid')) {
         //     ChatUserArr.push(value);
         //     dispatch(SET_CHAT_USER(ChatUserArr));
@@ -67,58 +70,78 @@ export const ChatDashboard = () => {
         //     // console.log(ChatUser,"ChatUser")
         //     // dispatch(SET_CHAT_USER(ChatUser));
         //   });
-
-      for (let i = 0; i < ChatId?.length; i++) {
-          // console.log(ChatId[i], 'value');
-          console.log(ChatUserArr,"chatuser hai yeh ")
-          let value=ChatId[i]
-          if (value.hasOwnProperty('MemberUid')) {
-            ChatUserArr.push(value);
-              } else if (!value.hasOwnProperty('MemberUid')) {
-                // ChatUserArr = [];
-
-                await firestore()
-                .collection('Users')
-                .doc(value.Uid)
-                .onSnapshot(Detail => {
-                  let ind
-                  // console.log(ChatUserArr,"chatuser hai yeh 2")
-                  // console.log(Detail.data(),"detail on online")
-                  let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
-                  // console.log(ChatUser,"ChatUser")
-                  ChatUser.map((v,i)=>{
-                    if(v.UserUid === value.Uid){
-                      ind=i
-                      // console.log(ind,"index2")
-                    }
-                  })
-                  // console.log(ind,"index1")
-                  // var Indexchat=[...ChatUser]
-                  // for (let index = 0; index < ChatUserArr.length; index++) {
-                  //   // const element = array[index];
-                  //   if(Indexchat[index].UserUid === value.Uid){
-                  //     ind=index
-                  //     console.log(ind,"index2")
-                  //   }
-                  // }
-                  // console.log(ind,'index hai yeh')
-                  if(ind != undefined){
-                    console.log(ind,"ye kab chala")
-                    ChatUser.splice(ind,1,Detail.data())
-                    dispatch(SET_CHAT_USER(ChatUser));
-
-
-                  }else{
-
-                    ChatUserArr.push({...Detail.data()});
-                    dispatch(SET_CHAT_USER(ChatUserArr));
-
+          if(ChatId){
+            for (let i = 0; i < ChatId?.length; i++) {
+              console.log(ChatId[i], 'value');
+              // console.log(ChatUserArr,"chatuser hai yeh ")
+              let value=ChatId[i]
+              if (value.hasOwnProperty('MemberUid')) {
+                ChatUserArr.push(value);
+                dispatch(SET_CHAT_USER(ChatUserArr));
+    
+                  } else if (!value.hasOwnProperty('MemberUid')) {
+                    // ChatUserArr = [];
+    
+                    await firestore()
+                    .collection('Users')
+                    .doc(value.Uid)
+                    .onSnapshot(Detail => {
+                      let ind
+                      // console.log(ChatUserArr,"chatuser hai yeh 2")
+                      // console.log(Detail.data(),"detail on online")
+                      // let ChatUser = store?.getState()?.ChatDashboardReducer?.chatUser;
+                      // console.log(ChatUser,"ChatUser")
+                      ChatUserArr.map((v,i)=>{
+                        if(v.UserUid === value.Uid){
+                          ind=i
+                          // console.log(ind,"index2")
+                        }
+                      })
+                      // console.log(ind,"index1")
+                      // var Indexchat=[...ChatUser]
+                      // for (let index = 0; index < ChatUserArr.length; index++) {
+                      //   // const element = array[index];
+                      //   if(Indexchat[index].UserUid === value.Uid){
+                      //     ind=index
+                      //     console.log(ind,"index2")
+                      //   }
+                      // }
+                      // console.log(ind,'index hai yeh')
+                      if(ind != undefined){
+                       if(Detail?.data()){
+                        // console.log(ind,"ye kab chala")
+                        ChatUserArr.splice(ind,1,Detail?.data())
+                        dispatch(SET_CHAT_USER(ChatUserArr));
+    
+    
+                       }
+                      }else{
+    
+                        ChatUserArr.push({...Detail?.data()});
+                        dispatch(SET_CHAT_USER(ChatUserArr));
+    
+                      }
+                    });
                   }
-                });
-              }
-            }
+                }
+          }else{
+            dispatch(SET_CHAT_USER(ChatUserArr));
+          }
+      
             // ChatUser=ChatUserArr
             console.log(ChatUserArr,"chatusercheck")
+            ChatUserArr.map(v=>{
+              // console.log(v,"check vv")
+              if(v.hasOwnProperty('MemberUid')){
+                firestore().collection('chat').doc(v?.ChatKey).onSnapshot(data=>{
+                  // console.log(data?.data(),"check this is data")
+                  console.log("map last msg")
+                  dispatch(SetlastMsg({Lastmsg:data?.data()?.lastMsg,TimeLastmsg:data?.data()?.Time}));
+                  // SetTime(data?.data()?.Time)
+                  // console.log(data.data(),"data.data()")
+                })
+              }
+            })
 
           });
   };
@@ -142,8 +165,8 @@ export const GroupCreate = props => {
       let UidArr = [UserUid];
 
       const PushKey = await firestore()
-        .collection('chat')
-        .doc().id;
+      .collection('chat')
+      .add({});
         const GroupMem=SearchArray.filter(memb=>memb.isSelected)
         GroupMem.map(v => {
         UidArr.push(v.UserUid);
@@ -159,7 +182,7 @@ export const GroupCreate = props => {
               GroupImage: url,
               CreatorUid: UserUid,
               MemberUid: UidArr,
-              ChatKey: PushKey,
+              ChatKey: PushKey._documentPath._parts[1],
               Istyping: false,
             }),
           });
@@ -173,7 +196,7 @@ export const GroupCreate = props => {
               GroupImage: url,
               CreatorUid: UserUid,
               MemberUid: UidArr,
-              ChatKey: PushKey,
+              ChatKey: PushKey._documentPath._parts[1],
               Istyping: false,
             }),
           }).then(getData=>{
@@ -182,15 +205,15 @@ export const GroupCreate = props => {
               GroupImage: url,
               CreatorUid: UserUid,
               MemberUid: UidArr,
-              ChatKey: PushKey,
+              ChatKey: PushKey._documentPath._parts[1],
               Istyping: false,
             }
             const isSelectedItem=SearchArray.filter(val=>val.isSelected)
             isSelectedItem.map(item=>{
               item.isSelected=false
-              store.dispatch(SET_ALLUSERS_SEARCH(SearchArray));
-
+              
             })
+            dispatch(SET_ALLUSERS_SEARCH(SearchArray));
             dispatch(SET_GROUP_IMAGE(""))
             dispatch(ActiveChat(GroupObj));
             dispatch(SET_ISGROUP(true));
@@ -279,5 +302,12 @@ export const SET_SHOW_LOADER=showLoader=>{
   return{
     type:SHOW_LOADER,
     showLoader
+  }
+}
+
+export const SetlastMsg=lastMsg=>{
+  return{
+    type:LAST_MSG,
+    lastMsg
   }
 }
