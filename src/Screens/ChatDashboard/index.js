@@ -123,11 +123,11 @@ const Chat = props => {
       // console.log(Item,"group Item")
       // console.log(ReducerState?.lastMsg,"last msg reducer")
       if (Item.hasOwnProperty('MemberUid')) {
-     
-     
-      // console.log(ReducerState.lastMsg,"group Item")
-      return (
-        <TouchableOpacity
+        
+        
+        // console.log(ReducerState.lastMsg,"group Item")
+        return (
+          <TouchableOpacity
           style={styles.MainListView}
           onPress={() => {
             GroupChatStart(Item);

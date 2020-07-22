@@ -43,12 +43,12 @@ export const ChatDashboard = () => {
     firestore()
       .collection('Users')
       .doc(UserUid)
-      .onSnapshot(async UserData => {
+      .onSnapshot( UserData => {
         let ChatUserArr = [];
         console.log(ChatUserArr,"check first data")
         let ChatId = UserData?.data()?.ChatId
         // UserData?.data()?.ChatId?.map(value => {
-        console.log(UserData.data(), 'UserData.data()');
+        console.log(UserData?.data(), 'UserData.data()');
         // console.log(ChatId, 'ChatId');
         //   if (value.hasOwnProperty('MemberUid')) {
         //     farazArr.push(value);
