@@ -35,7 +35,7 @@ const App = () => {
         // console.log(user, 'uid');
         checkPermission(user)
         store.dispatch(ChatDashboard());
-    store.dispatch(AllUserAction());
+      store.dispatch(AllUserAction());
 
         firestore()
         .collection('Users')

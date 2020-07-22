@@ -64,7 +64,7 @@ const Chat = props => {
 
 
     store.subscribe(() => {
-      // console.log('subscribe dashboard')
+      console.log('subscribe dashboard')
       SetReducerState(store.getState().ChatDashboardReducer);
       setGroupstate(store.getState().AllUsersReducer);
       // console.log(store?.getState()?.ChatDashboardReducer?.chatUser.length,"dashboard chat reducer")
@@ -121,6 +121,7 @@ const Chat = props => {
 
   const Item = Item => {
       // console.log(Item,"group Item")
+      // console.log(ReducerState?.lastMsg,"last msg reducer")
       if (Item.hasOwnProperty('MemberUid')) {
      
      
@@ -140,12 +141,12 @@ const Chat = props => {
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item.groupName}</Text>
-              <Text style={{ color: "grey" }}>{moment(ReducerState?.lastMsg?.TimeLastmsg).fromNow(true)}</Text>
+              <Text style={{ color: "grey" }}>{moment(Item?.lTime).fromNow(true)}</Text>
             </View>
 
 
             <View style={styles.msgNotiView}>
-        <Text style={styles.LastMsgStyle}>{ReducerState?.lastMsg?.Lastmsg?.substring(0, 25)+"..."}</Text>
+        <Text style={styles.LastMsgStyle}>{Item?.Lmsg?.substring(0, 25)+"..."}</Text>
               {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
               </View> */}
@@ -157,16 +158,16 @@ const Chat = props => {
       );
     }
     if (!Item.hasOwnProperty('MemberUid')) {
-    const UserUid = store?.getState()?.UserReducer?.user?.uid;
+    // const UserUid = store?.getState()?.UserReducer?.user?.uid;
       // console.log(Item,"item check")
-      let lastMsg
-      let time
-      Item?.ChatId?.filter(v=>{
-        if(v.Uid === UserUid){
-          lastMsg=v.lastMsg
-          time=v.Time
-        }
-      })
+      // let lastMsg
+      // let time
+      // Item?.ChatId?.filter(v=>{
+      //   if(v.Uid === UserUid){
+      //     lastMsg=v.lastMsg
+      //     time=v.Time
+      //   }
+      // })
       // console.log(time,lastMsg,"check both")
       return (
         <TouchableOpacity
@@ -183,12 +184,12 @@ const Chat = props => {
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item?.displayName}</Text>
-        <Text style={{ color: "grey" }}>{moment(time).fromNow(true)}</Text>
+        <Text style={{ color: "grey" }}>{moment(Item?.lTime).fromNow(true)}</Text>
             </View>
 
 
             <View style={styles.msgNotiView}>
-        <Text style={styles.LastMsgStyle}>{lastMsg?.substring(0,25)+"..."}</Text>
+        <Text style={styles.LastMsgStyle}>{Item?.Lmsg?.substring(0, 25)+"..."}</Text>
               {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
               </View> */}

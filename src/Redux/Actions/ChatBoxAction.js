@@ -77,7 +77,7 @@ export const ChatBoxAction = () => {
             } else {
               // Filter.map(item => {
                 // SetKey(item?.ChatKey);
-              dispatch(SET_NEW_CHAT(false));
+              // dispatch(SET_NEW_CHAT(false));
 
                 const item=Filter[0]
                 dispatch(SET_KEY(item?.ChatKey));
@@ -165,7 +165,6 @@ export const SendAction = (scrollRef) => {
         })
 
 
-
       firestore()
         .collection('Users')
         .doc(UserUid)
@@ -175,8 +174,8 @@ export const SendAction = (scrollRef) => {
               Uid: ActiveUserUid,
               ChatKey: PushKey._documentPath._parts[1],
               // Istyping: false,
-              lastMsg: states.message,
-              timestamp: new Date().getTime()
+              // lastMsg: states.message,
+              // timestamp: new Date().getTime()
 
 
             },
@@ -191,11 +190,16 @@ export const SendAction = (scrollRef) => {
             Uid: UserUid,
             ChatKey: PushKey._documentPath._parts[1],
             // Istyping: false,
-            lastMsg: states.message,
-            timestamp: new Date().getTime()
+            // lastMsg: states.message,
+            // timestamp: new Date().getTime()
 
           }),
-        });
+        }).then(set=>{
+          firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
+            lastMsg:states.message,
+            Time : new Date().getTime()
+          })
+        })
       dispatch(SET_KEY(PushKey));
       dispatch(SET_FIRST_CHAT(false));
     }
@@ -226,8 +230,8 @@ export const SendAction = (scrollRef) => {
           ChatId: firestore.FieldValue.arrayUnion({
             Uid: ActiveUserUid,
             ChatKey: PushKey._documentPath._parts[1],
-            lastMsg: states.message,
-            timestamp: new Date().getTime()
+            // lastMsg: states.message,
+            // timestamp: new Date().getTime()
             // Istyping: false,
 
 
@@ -242,11 +246,16 @@ export const SendAction = (scrollRef) => {
             Uid: UserUid,
             ChatKey: PushKey._documentPath._parts[1],
             // Istyping: false,
-            lastMsg: states.message,
-            timestamp: new Date().getTime()
+            // lastMsg: states.message,
+            // timestamp: new Date().getTime()
 
           }),
-        });
+        }).then(set=>{
+          firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
+            lastMsg:states.message,
+            Time : new Date().getTime()
+          })
+        })
 
       dispatch(SET_KEY(PushKey));
       dispatch(SET_NEW_CHAT(false));
@@ -266,70 +275,74 @@ export const SendAction = (scrollRef) => {
           Uid: ActiveUserUid,
           Msg: states.message
         })
-     if(!store.getState().GroupReducer.group){
-       console.log("ye wala chala pehla")
-      var index;
-      var CHATID
-      firestore()
-        .collection('Users')
-        .doc(UserUid).get()
-        .then(val => {
-          CHATID = [...val?.data().ChatId];
-          console.log(CHATID, 'hhhhh');
-          const filter = CHATID?.filter((v, i) => {
-            if (v.Uid === ActiveUserUid) {
-              index = i;
-            }
-          })
-          CHATID[index].lastMsg = states.message;
-          CHATID[index].Time = new Date().getTime()
-          console.log(CHATID, 'chatid');
-          firestore()
-            .collection('Users')
-            .doc(UserUid)
-            .update({ ChatId: CHATID });
-        }).then(set=>{
-          var index1;
-      var CHATID1
-      firestore()
-        .collection('Users')
-        .doc(ActiveUserUid).get()
-        .then(val => {
-          CHATID1 = [...val?.data().ChatId];
-          console.log(CHATID1, 'hhhhh');
-          const filter = CHATID1?.filter((v, i) => {
-            if (v.Uid === UserUid) {
-              index1 = i;
-            }
-          })
-          CHATID1[index1].lastMsg = states.message;
-          CHATID1[index1].Time = new Date().getTime()
-          console.log(CHATID1, 'chatid');
-          firestore()
-            .collection('Users')
-            .doc(ActiveUserUid)
-            .update({ ChatId: CHATID1 });
-          console.log(CHATID1[index1].lastMsg, 'msg last');
+        console.log(states?.key,"keyyyyy")
+        firestore().collection('chat').doc(states?.key).update({
+          lastMsg:states.message,
+          Time : new Date().getTime()
         })
-        })
-     }else if(store.getState().GroupReducer.group){
-      console.log("ye wala chala dosrA")
-      firestore()
-      .collection('Users')
-      .doc(UserUid).get()
-      .then(val => {
-        console.log(val.data(),"data dosra")
-        val?.data()?.ChatId.map(v=>{
-          console.log(v.hasOwnProperty('MemberUid'),"check member")
-          if(v.hasOwnProperty('MemberUid')){
-            console.log(v?.ChatKey,"group data")
-            firestore().collection('chat').doc(v?.ChatKey).update({
-              lastMsg:states.message,
-              Time : new Date().getTime()
-            })
-          }
-        })
-      })
+    //  if(!store.getState().GroupReducer.group){
+    //    console.log("ye wala chala pehla")
+    //   var index;
+    //   var CHATID
+    //   firestore()
+    //     .collection('Users')
+    //     .doc(UserUid).get()
+    //     .then(val => {
+    //       CHATID = [...val?.data().ChatId];
+    //       console.log(CHATID, 'hhhhh');
+    //       const filter = CHATID?.filter((v, i) => {
+    //         if (v.Uid === ActiveUserUid) {
+    //           index = i;
+    //         }
+    //       })
+    //       CHATID[index].lastMsg = states.message;
+    //       CHATID[index].Time = new Date().getTime()
+    //       console.log(CHATID, 'chatid');
+    //       firestore()
+    //         .collection('Users')
+    //         .doc(UserUid)
+    //         .update({ ChatId: CHATID });
+    //     }).then(set=>{
+    //       var index1;
+    //   var CHATID1
+    //   firestore()
+    //     .collection('Users')
+    //     .doc(ActiveUserUid).get()
+    //     .then(val => {
+    //       CHATID1 = [...val?.data().ChatId];
+    //       console.log(CHATID1, 'hhhhh');
+    //       const filter = CHATID1?.filter((v, i) => {
+    //         if (v.Uid === UserUid) {
+    //           index1 = i;
+    //         }
+    //       })
+    //       CHATID1[index1].lastMsg = states.message;
+    //       CHATID1[index1].Time = new Date().getTime()
+    //       console.log(CHATID1, 'chatid');
+    //       firestore()
+    //         .collection('Users')
+    //         .doc(ActiveUserUid)
+    //         .update({ ChatId: CHATID1 });
+    //       console.log(CHATID1[index1].lastMsg, 'msg last');
+    //     })
+    //     })
+
+    //  }
+    //  else if(store.getState().GroupReducer.group){
+      // console.log("ye wala chala dosrA")
+      // firestore()
+      // .collection('Users')
+      // .doc(UserUid).get()
+      // .then(val => {
+      //   console.log(val.data(),"data dosra")
+      //   val?.data()?.ChatId.map(v=>{
+      //     // console.log(v.hasOwnProperty('MemberUid'),"check member")
+      //     // if(v.hasOwnProperty('MemberUid')){
+      //       console.log(states?.ChatKey,"group data")
+            
+      //     // }
+      //   })
+      // })
      }
 
       
@@ -337,7 +350,7 @@ export const SendAction = (scrollRef) => {
     }
     scrollRef.scrollToEnd({ animated: true })
   };
-};
+// };
 
 const SET_FIRST_CHAT = firstChat => {
   return {

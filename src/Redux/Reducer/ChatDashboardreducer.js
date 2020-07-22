@@ -18,8 +18,8 @@ const InitialState = {
   showModal:false,
   showLottie:false,
   showLoader:false,
-  imageUrl:""
-  
+  imageUrl:"",
+  lastMsg:[]
 };
 
 const reducer = (state = InitialState, action) => {
