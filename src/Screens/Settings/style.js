@@ -20,6 +20,7 @@ export default styles = StyleSheet.create({
     marginTop: wp(5),
     paddingTop:wp(3),
     paddingBottom: wp(2),
+    flex:1
   },
   TouchStyle: {
     flexDirection: "row",

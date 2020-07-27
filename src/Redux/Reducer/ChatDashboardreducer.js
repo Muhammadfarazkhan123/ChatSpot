@@ -8,7 +8,7 @@ import {
   SHOW_MODAL,
   SHOW_LOTIE,
   SHOW_LOADER,
-  LAST_MSG
+  DETAIL_USER
 } from '../Actions/type';
 const InitialState = {
   usersDetail: [],
@@ -19,7 +19,7 @@ const InitialState = {
   showLottie:false,
   showLoader:false,
   imageUrl:"",
-  lastMsg:[]
+  DetailUser:[]
 };
 
 const reducer = (state = InitialState, action) => {
@@ -54,8 +54,8 @@ const reducer = (state = InitialState, action) => {
     case SHOW_LOADER: {
       return {...state, showLoader: action.showLoader};
     }
-    case LAST_MSG: {
-      return {...state, lastMsg: action.lastMsg};
+    case DETAIL_USER: {
+      return {...state, DetailUser: action.DetailUser};
     }
     default: {
       return state;

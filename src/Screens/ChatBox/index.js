@@ -43,6 +43,7 @@ const ChatBox = (props) => {
   const UserUid = store.getState()?.UserReducer?.user?.uid;
   const ActiveUserUid = !store.getState().GroupReducer.group && store.getState()?.ActiveChatReducer?.ChatUser?.UserUid;
   const Details = store.getState()?.ActiveChatReducer?.ChatUser
+  console.log(props.route.params.v,"props")
   useEffect(() => {
 
     // if (isthisUpdate) {
@@ -132,7 +133,7 @@ const ChatBox = (props) => {
               <View
                 style={{
                   backgroundColor: v?.Uid == UserUid ? 'rgb(28, 98, 219)' : 'rgb(235, 238, 244)',
-                  maxHeight: hp('20%'),
+                  // maxHeight: hp('20%'),
                   minHeight: hp('6%'),
                   marginTop: hp('1.5%'),
                   maxWidth: wp('70%'),
@@ -183,11 +184,11 @@ const ChatBox = (props) => {
         {/* {checkTyping &&<View>
           <Text>typing</Text>
         </View>} */}
-        {reducerState?.typing && <View style={{ zIndex: 3 }}>
-          <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%" }}
-          /></View>}
 
       </ScrollView>
+        {reducerState?.typing && <View style={{backgroundColor:"white"}}>
+          <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%",paddingLeft:"5%"}}
+          /></View>}
       {/* <View style={{height:"50%"}}>
       <EmojiSelector onEmojiSelected={emoji => store.dispatch(SET_EMOJI(emoji))} showSearchBar={false}/>
       
@@ -209,7 +210,7 @@ const ChatBox = (props) => {
               multiline
               value={reducerState?.message}
             />
-            {!reducerState?.message ? <EntypoIcon name="circle-with-plus" size={30} color="rgb(28, 98, 219)" />
+            {!reducerState?.message.trim() ? <EntypoIcon name="circle-with-plus" size={30} color="rgb(28, 98, 219)" />
               :
               <TouchableOpacity
                 onPress={() => {

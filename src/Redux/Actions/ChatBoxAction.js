@@ -15,7 +15,7 @@ export const ChatBoxAction = () => {
   let MsgArr = store.getState().ChatBoxReducer.MsgArr;
   const Text = store?.getState()?.ChatBoxReducer?.message;
   const Key = store?.getState()?.ChatBoxReducer?.key;
-  // const UserTyping = firestore()
+  console.log(ActiveUserUid,"Active user111")
   //   .collection('Users')
   //   .doc(UserUid)
   //   .onSnapshot(data => {
@@ -44,6 +44,7 @@ export const ChatBoxAction = () => {
               SET_KEY(store.getState()?.ActiveChatReducer?.ChatUser?.ChatKey),
             );
             // if (isthisUpdate) {
+              console.log(store.getState()?.ActiveChatReducer?.ChatUser?.ChatKey,"chatbox chatkey")
             firestore()
               .collection('chat')
               .doc(store.getState()?.ActiveChatReducer?.ChatUser?.ChatKey)
@@ -54,7 +55,7 @@ export const ChatBoxAction = () => {
                 v?.docs.forEach(MsgData => {
                   MsgArr.push(MsgData.data());
                 });
-                console.log('msg arrrr')
+                console.log(MsgArr,'msg arrrr')
                 dispatch(SET_MSG_ARR(MsgArr));
               });
           } else if (
@@ -62,8 +63,13 @@ export const ChatBoxAction = () => {
               .getState()
               ?.ActiveChatReducer?.ChatUser?.hasOwnProperty('MemberUid')
           ) {
+
+          console.log(ActiveUserUid,"Active user111")
+
             const Filter = DocData?.data()?.ChatId.filter(v => {
-              return v?.Uid == ActiveUserUid;
+              console.log(v?.Uid === ActiveUserUid,"check the")
+              return v?.Uid === ActiveUserUid;
+              
             });
             console.log(
               store.getState()?.ActiveChatReducer?.ChatUser.ChatKey,
@@ -81,38 +87,41 @@ export const ChatBoxAction = () => {
 
                 const item=Filter[0]
                 dispatch(SET_KEY(item?.ChatKey));
-                // if (isthisUpdate) {
+                console.log(item?.ChatKey,"chatkey single")
+                console.log(MsgArr,'msg arrrr 1')
+
                 firestore()
                   .collection('chat')
                   .doc(item?.ChatKey)
                   .collection('Chats')
                   .orderBy('timestamp')
                   .onSnapshot(v => {
-                    MsgArr = [];
+                    let MsgArray = [];
                     v?.docs.forEach(MsgData => {
-                      MsgArr.push(MsgData?.data());
+                      MsgArray.push(MsgData?.data());
                     });
-                    dispatch(SET_MSG_ARR(MsgArr));
+                console.log(MsgArray,'msg arrrr 2')
+                    dispatch(SET_MSG_ARR(MsgArray));
                   });
-                  firestore().collection('chat').doc(item?.ChatKey).onSnapshot(TypingData=>{
-                    console.log('TypingData')
-                    console.log(TypingData?.data(),'typing data')
+                  // firestore().collection('chat').doc(item?.ChatKey).onSnapshot(TypingData=>{
+                  //   console.log('TypingData')
+                  //   console.log(TypingData?.data(),'typing data')
               
-                      console.log(ActiveUserUid,"ActiveUser")   
-                      // let CheckUid=ActiveUserUid
-                      console.log(TypingData?.data()?.[ActiveUserUid],"check it1")
+                  //     console.log(ActiveUserUid,"ActiveUser")   
+                  //     // let CheckUid=ActiveUserUid
+                  //     console.log(TypingData?.data()?.[ActiveUserUid],"check it1")
               
-                    if(TypingData?.data()?.[ActiveUserUid]){
-                      // console.log(TypingData.data()?.ActiveUserUid,"check it")
-                      // Set_Typing(true)
-                      dispatch(SET_TYPING(true))
-                    }else{
-                      // Set_Typing(false)
-                      dispatch(SET_TYPING(false))
+                  //   if(TypingData?.data()?.[ActiveUserUid]){
+                  //     // console.log(TypingData.data()?.ActiveUserUid,"check it")
+                  //     // Set_Typing(true)
+                  //     dispatch(SET_TYPING(true))
+                  //   }else{
+                  //     // Set_Typing(false)
+                  //     dispatch(SET_TYPING(false))
 
               
-                    }
-                  })
+                  //   }
+                  // })
                 // SetisthisUpdate(false);
                 // }
                 console.log(item?.ChatKey, 'item?.ChatKey');
@@ -174,8 +183,8 @@ export const SendAction = (scrollRef) => {
               Uid: ActiveUserUid,
               ChatKey: PushKey._documentPath._parts[1],
               // Istyping: false,
-              // lastMsg: states.message,
-              // timestamp: new Date().getTime()
+              lastMsg: states.message,
+              timestamp: new Date().getTime()
 
 
             },
@@ -190,16 +199,17 @@ export const SendAction = (scrollRef) => {
             Uid: UserUid,
             ChatKey: PushKey._documentPath._parts[1],
             // Istyping: false,
-            // lastMsg: states.message,
-            // timestamp: new Date().getTime()
+            lastMsg: states.message,
+            timestamp: new Date().getTime()
 
           }),
-        }).then(set=>{
-          firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
-            lastMsg:states.message,
-            Time : new Date().getTime()
-          })
         })
+        // .then(set=>{
+        //   firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
+        //     lastMsg:states.message,
+        //     Time : new Date().getTime()
+        //   })
+        // })
       dispatch(SET_KEY(PushKey));
       dispatch(SET_FIRST_CHAT(false));
     }
@@ -230,8 +240,8 @@ export const SendAction = (scrollRef) => {
           ChatId: firestore.FieldValue.arrayUnion({
             Uid: ActiveUserUid,
             ChatKey: PushKey._documentPath._parts[1],
-            // lastMsg: states.message,
-            // timestamp: new Date().getTime()
+            lastMsg: states.message,
+            timestamp: new Date().getTime()
             // Istyping: false,
 
 
@@ -246,16 +256,17 @@ export const SendAction = (scrollRef) => {
             Uid: UserUid,
             ChatKey: PushKey._documentPath._parts[1],
             // Istyping: false,
-            // lastMsg: states.message,
-            // timestamp: new Date().getTime()
+            lastMsg: states.message,
+            timestamp: new Date().getTime()
 
           }),
-        }).then(set=>{
-          firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
-            lastMsg:states.message,
-            Time : new Date().getTime()
-          })
         })
+        // .then(set=>{
+        //   firestore().collection('chat').doc(PushKey._documentPath._parts[1]).update({
+        //     lastMsg:states.message,
+        //     Time : new Date().getTime()
+        //   })
+        // })
 
       dispatch(SET_KEY(PushKey));
       dispatch(SET_NEW_CHAT(false));
@@ -275,74 +286,130 @@ export const SendAction = (scrollRef) => {
           Uid: ActiveUserUid,
           Msg: states.message
         })
-        console.log(states?.key,"keyyyyy")
-        firestore().collection('chat').doc(states?.key).update({
-          lastMsg:states.message,
-          Time : new Date().getTime()
+        // console.log(states?.key,"keyyyyy")
+        // firestore().collection('chat').doc(states?.key).update({
+        //   lastMsg:states.message,
+        //   Time : new Date().getTime()
+        // })
+     if(!store.getState().GroupReducer.group){
+       console.log("ye wala chala pehla")
+      var index;
+      var CHATID
+      firestore()
+        .collection('Users')
+        .doc(UserUid).get()
+        .then(val => {
+          CHATID = [...val?.data().ChatId];
+          // console.log(CHATID, 'hhhhh');
+          const filter = CHATID?.filter((v, i) => {
+            if (v.Uid === ActiveUserUid) {
+              index = i;
+            }
+          })
+          CHATID[index].lastMsg = states.message;
+          CHATID[index].Time = new Date().getTime()
+          // console.log(CHATID, 'chatid');
+          firestore()
+            .collection('Users')
+            .doc(UserUid)
+            .update({ ChatId: CHATID });
+        }).then(set=>{
+          var index1;
+      var CHATID1
+      firestore()
+        .collection('Users')
+        .doc(ActiveUserUid).get()
+        .then(val => {
+          CHATID1 = [...val?.data().ChatId];
+          // console.log(CHATID1, 'hhhhh');
+          const filter = CHATID1?.filter((v, i) => {
+            if (v.Uid === UserUid) {
+              index1 = i;
+            }
+          })
+          CHATID1[index1].lastMsg = states.message;
+          CHATID1[index1].Time = new Date().getTime()
+          // console.log(CHATID1, 'chatid');
+          firestore()
+            .collection('Users')
+            .doc(ActiveUserUid)
+            .update({ ChatId: CHATID1 });
+          // console.log(CHATID1[index1].lastMsg, 'msg last');
         })
-    //  if(!store.getState().GroupReducer.group){
-    //    console.log("ye wala chala pehla")
-    //   var index;
-    //   var CHATID
-    //   firestore()
-    //     .collection('Users')
-    //     .doc(UserUid).get()
-    //     .then(val => {
-    //       CHATID = [...val?.data().ChatId];
-    //       console.log(CHATID, 'hhhhh');
-    //       const filter = CHATID?.filter((v, i) => {
-    //         if (v.Uid === ActiveUserUid) {
-    //           index = i;
-    //         }
-    //       })
-    //       CHATID[index].lastMsg = states.message;
-    //       CHATID[index].Time = new Date().getTime()
-    //       console.log(CHATID, 'chatid');
-    //       firestore()
-    //         .collection('Users')
-    //         .doc(UserUid)
-    //         .update({ ChatId: CHATID });
-    //     }).then(set=>{
-    //       var index1;
-    //   var CHATID1
-    //   firestore()
-    //     .collection('Users')
-    //     .doc(ActiveUserUid).get()
-    //     .then(val => {
-    //       CHATID1 = [...val?.data().ChatId];
-    //       console.log(CHATID1, 'hhhhh');
-    //       const filter = CHATID1?.filter((v, i) => {
-    //         if (v.Uid === UserUid) {
-    //           index1 = i;
-    //         }
-    //       })
-    //       CHATID1[index1].lastMsg = states.message;
-    //       CHATID1[index1].Time = new Date().getTime()
-    //       console.log(CHATID1, 'chatid');
-    //       firestore()
-    //         .collection('Users')
-    //         .doc(ActiveUserUid)
-    //         .update({ ChatId: CHATID1 });
-    //       console.log(CHATID1[index1].lastMsg, 'msg last');
-    //     })
-    //     })
+        })
 
-    //  }
-    //  else if(store.getState().GroupReducer.group){
-      // console.log("ye wala chala dosrA")
+     }
+     else if(store.getState().GroupReducer.group){
+      console.log("ye wala chala pehla")
+      var index;
+      var CHATID
+      firestore()
+        .collection('Users')
+        .doc(UserUid).get()
+        .then(val => {
+          CHATID = [...val?.data().ChatId];
+          console.log(CHATID, 'hhhhh');
+          const filter = CHATID?.filter((v, i) => {
+            if (v.ChatKey === states.key) {
+              index = i;
+            }
+          })
+          console.log(CHATID[index].MemberUid,"group data")
+          for (let i = 0; i < CHATID[index]?.MemberUid.length; i++) {
+            let ind
+            const element = CHATID[index].MemberUid[i];
+            console.log(element,"element")
+            firestore().collection('Users').doc(element).get().then(Data=>{
+              let MemberChatId=[...Data?.data()?.ChatId]
+              let index
+              MemberChatId.filter((v,i)=>{
+                if (v.ChatKey === states.key) {
+                  console.log(MemberChatId[i],"vv filter")
+                  MemberChatId[i].lastMsg = states.message;
+                  MemberChatId[i].Time = new Date().getTime()
+                  index=i
+                }
+              })
+              console.log(index,"index")
+              console.log(MemberChatId, 'msg last');
+                    firestore()
+              .collection('Users')
+              .doc(element)
+              .update({ ChatId: MemberChatId });
+            })
+          }
+          // CHATID[index].lastMsg = states.message;
+          // CHATID[index].Time = new Date().getTime()
+          // console.log(CHATID, 'chatid');
+          // firestore()
+          //   .collection('Users')
+          //   .doc(UserUid)
+          //   .update({ ChatId: CHATID });
+        })
+      //   .then(set=>{
+      //     var index1;
+      // var CHATID1
       // firestore()
-      // .collection('Users')
-      // .doc(UserUid).get()
-      // .then(val => {
-      //   console.log(val.data(),"data dosra")
-      //   val?.data()?.ChatId.map(v=>{
-      //     // console.log(v.hasOwnProperty('MemberUid'),"check member")
-      //     // if(v.hasOwnProperty('MemberUid')){
-      //       console.log(states?.ChatKey,"group data")
-            
-      //     // }
+      //   .collection('Users')
+      //   .doc(ActiveUserUid).get()
+      //   .then(val => {
+      //     CHATID1 = [...val?.data().ChatId];
+      //     console.log(CHATID1, 'hhhhh');
+      //     const filter = CHATID1?.filter((v, i) => {
+      //       if (v.ChatKey === states.key) {
+      //         index1 = i;
+      //       }
+      //     })
+      //     CHATID1[index1].lastMsg = states.message;
+      //     CHATID1[index1].Time = new Date().getTime()
+      //     console.log(CHATID1, 'chatid');
+      //     firestore()
+      //       .collection('Users')
+      //       .doc(ActiveUserUid)
+      //       .update({ ChatId: CHATID1 });
+      //     console.log(CHATID1[index1].lastMsg, 'msg last');
       //   })
-      // })
+      //   })
      }
 
       
@@ -350,7 +417,7 @@ export const SendAction = (scrollRef) => {
     }
     scrollRef.scrollToEnd({ animated: true })
   };
-// };
+};
 
 const SET_FIRST_CHAT = firstChat => {
   return {
@@ -373,7 +440,7 @@ export const SET_MSG_ARR = MsgArr => {
   };
 };
 
-const SET_KEY = key => {
+export const SET_KEY = key => {
   return {
     type: KEY,
     key,

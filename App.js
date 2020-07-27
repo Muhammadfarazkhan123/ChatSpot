@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, AsyncStorage } from 'react-native';
+import { View, Text, AsyncStorage,AppState } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/Redux/store';
 import Navigation from './src/Navigation/stack';
@@ -25,6 +25,7 @@ const App = () => {
       if (user) {
         // console.log(user, 'user hai');
         // console.log("app js User")
+        AppState.addEventListener('change', _handleAppStateChange)
         const UserObj = {
           displayName: user.displayName,
           PhotoUrl: user.photoURL,
@@ -45,6 +46,21 @@ const App = () => {
       
     });
   };
+  const _handleAppStateChange = (NextAppState) => {
+    const UserUid = store?.getState()?.UserReducer?.user?.uid;
+
+    console.log(NextAppState, "next state")
+    if (NextAppState === 'active') {
+      // console.log("online")
+      firestore().collection('Users').doc(UserUid).update({ IsOnline: true })
+
+    } else {
+      alert(NextAppState)
+      // console.log('offline')
+      firestore().collection('Users').doc(UserUid).update({ IsOnline: false })
+
+    }
+  }
   useEffect(() => {
     console.log("app js useeffect")
 
