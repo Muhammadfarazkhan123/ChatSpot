@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EntypoIcon from 'react-native-vector-icons/Entypo'
+import EntypoIcon from 'react-native-vector-icons/Entypo';
 import styles from './style';
 import firestore from '@react-native-firebase/firestore';
 import moment from 'moment';
 import store from '../../Redux/store';
-import EmojiSelector from 'react-native-emoji-selector'
-import EmojiBoard from '../../Components/react-native-emoji-board'
-import LottieView from 'lottie-react-native'
+import EmojiSelector from 'react-native-emoji-selector';
+import EmojiBoard from '../../Components/react-native-emoji-board';
+import LottieView from 'lottie-react-native';
 
 import {
   ChatBoxAction,
@@ -25,36 +25,37 @@ import {
   EndTyping,
   SET_EMOJI,
 } from '../../Redux/Actions/ChatBoxAction';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Header from "../../Components/Header/index"
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Header from '../../Components/Header/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const ChatBox = (props) => {
+const ChatBox = props => {
   const [isthisUpdate, SetisthisUpdate] = useState(true);
   const [scrollRef, SetScrollRef] = useState();
   const [reducerState, SetReducerState] = useState();
   const [groupReducer, SetgroupReducer] = useState();
-  const [emoji, SetEmoji] = useState(false)
-  const [checkTyping, Set_Typing] = useState(false)
+  const [emoji, SetEmoji] = useState(false);
+  const [checkTyping, Set_Typing] = useState(false);
 
   const UserUid = store.getState()?.UserReducer?.user?.uid;
-  const ActiveUserUid = !store.getState().GroupReducer.group && store.getState()?.ActiveChatReducer?.ChatUser?.UserUid;
-  const Details = store.getState()?.ActiveChatReducer?.ChatUser
-  console.log(props.route.params.v,"props")
+  const ActiveUserUid =
+    !store.getState().GroupReducer.group &&
+    store.getState()?.ActiveChatReducer?.ChatUser?.UserUid;
+  const Details = store.getState()?.ActiveChatReducer?.ChatUser;
+  console.log(props?.route?.params?.v, 'props');
   useEffect(() => {
-
     // if (isthisUpdate) {
-      console.log('useeffact')
-      store.dispatch(ChatBoxAction());
-      store.subscribe(() => {
-        SetReducerState(store.getState().ChatBoxReducer);
-        SetgroupReducer(store.getState()?.GroupReducer);
-        console.log("subscribe chatbox")
-        SetisthisUpdate(false);
-      });
+    console.log('useeffact');
+    store.dispatch(ChatBoxAction(props?.route?.params?.v));
+    store.subscribe(() => {
+      SetReducerState(store.getState().ChatBoxReducer);
+      SetgroupReducer(store.getState()?.GroupReducer);
+      console.log('subscribe chatbox');
+      SetisthisUpdate(false);
+    });
     // }
     // var typeVar = false
     // firestore().collection('Users').doc(UserUid).onSnapshot(data => {
@@ -72,10 +73,7 @@ const ChatBox = (props) => {
     //     Set_Typing(typeVar)
     //   })
     // })
-      console.log(store.getState()?.ChatBoxReducer,"reducerState?.key")
-
-    
-
+    console.log(store.getState()?.ChatBoxReducer, 'reducerState?.key');
   }, []);
   // console.log(reducerState?.firstChat === false,"check both")
   //     console.log(reducerState?.newChat === false,"new chat")
@@ -88,23 +86,23 @@ const ChatBox = (props) => {
 
   //     firestore().collection('chat').doc(reducerState?.key).onSnapshot(TypingData=>{
   //       console.log(TypingData.data(),'typing data')
-  //         console.log(ActiveUserUid,"ActiveUser")   
+  //         console.log(ActiveUserUid,"ActiveUser")
   //         // let CheckUid=ActiveUserUid
   //         console.log(TypingData.data()?.[ActiveUserUid],"check it1")
-  
+
   //       if(TypingData.data()?.[ActiveUserUid]){
   //         // console.log(TypingData.data()?.ActiveUserUid,"check it")
   //         Set_Typing(true)
   //       }else{
   //         Set_Typing(false)
-  
+
   //       }
   //     })
   //   }
   //  }
   // })
   const send = () => {
-    store.dispatch(SendAction(scrollRef));
+    store.dispatch(SendAction(scrollRef,props?.route?.params?.v));
   };
 
   const SetTyping = text => {
@@ -112,27 +110,31 @@ const ChatBox = (props) => {
     store.dispatch(SET_MESSAGE(text));
   };
 
-
-
   return (
-    <View style={{ flex: 1, backgroundColor: "rgb(210, 211, 216)" }}>
-
-      <Header HeaderName={!groupReducer?.group ? Details?.displayName : Details?.groupName} chatProps={props} />
+    <View style={{flex: 1, backgroundColor: 'rgb(210, 211, 216)'}}>
+      <Header
+        HeaderName={
+          !groupReducer?.group ? Details?.displayName : Details?.groupName
+        }
+        chatProps={props}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         ref={ref => {
           SetScrollRef(ref);
         }}
-        onContentSizeChange={() => scrollRef.scrollToEnd({ animated: true })}
+        onContentSizeChange={() => scrollRef.scrollToEnd({animated: true})}
         style={styles.MsgScrolView}
-        contentContainerStyle={{ paddingBottom: wp(5) }}
-      >
+        contentContainerStyle={{paddingBottom: wp(5)}}>
         {reducerState?.MsgArr.map((v, i) => {
           return (
-            <View style={{ marginBottom: wp(3) }}>
+            <View style={{marginBottom: wp(3)}}>
               <View
                 style={{
-                  backgroundColor: v?.Uid == UserUid ? 'rgb(28, 98, 219)' : 'rgb(235, 238, 244)',
+                  backgroundColor:
+                    v?.Uid == UserUid
+                      ? 'rgb(28, 98, 219)'
+                      : 'rgb(235, 238, 244)',
                   // maxHeight: hp('20%'),
                   minHeight: hp('6%'),
                   marginTop: hp('1.5%'),
@@ -149,33 +151,29 @@ const ChatBox = (props) => {
                   paddingVertical: wp(5),
                 }}
                 key={i}>
-                {groupReducer?.group && v?.Uid != UserUid && <Text
-                  style={{
-                    color: v?.Uid == UserUid ? 'white' : 'black',
-                    fontWeight: 'bold',
-                  }}
-
-                >
-                  { v.name + ':'}
-                </Text>}
+                {groupReducer?.group && v?.Uid != UserUid && (
+                  <Text
+                    style={{
+                      color: v?.Uid == UserUid ? 'white' : 'black',
+                      fontWeight: 'bold',
+                    }}>
+                    {v.name + ':'}
+                  </Text>
+                )}
                 <Text
                   style={{
                     color: v?.Uid == UserUid ? 'white' : 'black',
-                    textAlign: "left",
-
+                    textAlign: 'left',
                   }}>
                   {v.Msg}
                 </Text>
-
               </View>
               <Text
                 style={{
                   color: 'grey',
-                  textAlign: v?.Uid == UserUid ? 'right' : "left",
-                  fontWeight: "bold"
-                }}
-
-              >
+                  textAlign: v?.Uid == UserUid ? 'right' : 'left',
+                  fontWeight: 'bold',
+                }}>
                 {moment(v?.timestamp?.seconds * 1000).fromNow()}
               </Text>
             </View>
@@ -184,19 +182,34 @@ const ChatBox = (props) => {
         {/* {checkTyping &&<View>
           <Text>typing</Text>
         </View>} */}
-
       </ScrollView>
-        {reducerState?.typing && <View style={{backgroundColor:"white"}}>
-          <LottieView source={require('../../Assets/4600-typing-status.json')} autoPlay style={{ zIndex: 1,width:"10%",paddingLeft:"5%"}}
-          /></View>}
+      {reducerState?.typing && (
+        <View style={{backgroundColor: 'white'}}>
+          <LottieView
+            source={require('../../Assets/4600-typing-status.json')}
+            autoPlay
+            style={{zIndex: 1, width: '10%', paddingLeft: '5%'}}
+          />
+        </View>
+      )}
       {/* <View style={{height:"50%"}}>
       <EmojiSelector onEmojiSelected={emoji => store.dispatch(SET_EMOJI(emoji))} showSearchBar={false}/>
       
     </View> */}
-      <View style={{ backgroundColor: "white", paddingBottom: wp(3), paddingTop: wp(2) }}>
-        <View style={{ justifyContent: 'space-between' }}>
+      <View
+        style={{
+          backgroundColor: 'white',
+          paddingBottom: wp(3),
+          paddingTop: wp(2),
+        }}>
+        <View style={{justifyContent: 'space-between'}}>
           <View style={styles.MsgBoxView}>
-            <TouchableOpacity onPress={() => { SetEmoji(!emoji) }}><EntypoIcon name="emoji-happy" size={25} color="grey" /></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                SetEmoji(!emoji);
+              }}>
+              <EntypoIcon name="emoji-happy" size={25} color="grey" />
+            </TouchableOpacity>
             <TextInput
               placeholder="Type a message"
               style={styles.MsgBoxInput}
@@ -204,14 +217,20 @@ const ChatBox = (props) => {
               onChangeText={text => {
                 SetTyping(text);
               }}
-
-              onFocus={() => { SetEmoji(false) }}
+              onFocus={() => {
+                SetEmoji(false);
+              }}
               // onEndEditing={store.dispatch(EndTyping())}
               multiline
               value={reducerState?.message}
             />
-            {!reducerState?.message.trim() ? <EntypoIcon name="circle-with-plus" size={30} color="rgb(28, 98, 219)" />
-              :
+            {!reducerState?.message.trim() ? (
+              <EntypoIcon
+                name="circle-with-plus"
+                size={30}
+                color="rgb(28, 98, 219)"
+              />
+            ) : (
               <TouchableOpacity
                 onPress={() => {
                   send();
@@ -222,20 +241,23 @@ const ChatBox = (props) => {
                   color="rgb(28, 98, 219)"
                   style={styles.MsgBoxIcon}
                 />
-              </TouchableOpacity>}
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        {emoji && <View>
-          <EmojiBoard
-            showBoard={emoji} onClick={emoji => store.dispatch(SET_EMOJI(emoji.code))}
-            numCols={4}
-            tabBarPosition='top'
-            hideBackSpace={true}
-            tabBarStyle={{ marginLeft: "10%" }}
-            categoryDefautColor="rgb(28, 98, 219)"
-          />
-
-        </View>}
+        {emoji && (
+          <View>
+            <EmojiBoard
+              showBoard={emoji}
+              onClick={emoji => store.dispatch(SET_EMOJI(emoji.code))}
+              numCols={4}
+              tabBarPosition="top"
+              hideBackSpace={true}
+              tabBarStyle={{marginLeft: '10%'}}
+              categoryDefautColor="rgb(28, 98, 219)"
+            />
+          </View>
+        )}
       </View>
     </View>
   );

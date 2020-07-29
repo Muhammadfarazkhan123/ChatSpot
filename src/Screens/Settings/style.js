@@ -25,7 +25,7 @@ export default styles = StyleSheet.create({
   TouchStyle: {
     flexDirection: "row",
     paddingHorizontal: wp(8),
-    paddingVertical: wp(4),
+    paddingVertical: wp(3),
     justifyContent: "space-between"
   },
   IconStyle: {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -16,8 +16,8 @@ import firestore from '@react-native-firebase/firestore';
 import store from '../../Redux/store';
 import MatIcon from 'react-native-vector-icons/MaterialIcons';
 import styles from './style';
-import { ActiveChat } from '../../Redux/Actions/ActiveChatAction';
-import { SET_MSG_ARR,SET_KEY } from '../../Redux/Actions/ChatBoxAction';
+import {ActiveChat} from '../../Redux/Actions/ActiveChatAction';
+import {SET_MSG_ARR, SET_KEY} from '../../Redux/Actions/ChatBoxAction';
 import Loader from '../../Components/Loader/index';
 import ImagePicker from 'react-native-image-crop-picker';
 import moment from 'moment';
@@ -31,7 +31,7 @@ import {
   SET_SHOW_LOTTIE,
   SET_SHOW_LOADER,
 } from '../../Redux/Actions/ChatDashboardAction';
-import { SET_ISGROUP } from '../../Redux/Actions/GroupAction';
+import {SET_ISGROUP} from '../../Redux/Actions/GroupAction';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -43,10 +43,10 @@ import storage from '@react-native-firebase/storage';
 import {
   AllUserAction,
   SET_ALLUSERS_SEARCH,
-  SET_MODAL_SEARCH
+  SET_MODAL_SEARCH,
 } from '../../Redux/Actions/AllUserAction';
 import style from './style';
-import { set } from 'react-native-reanimated';
+import {set} from 'react-native-reanimated';
 import reducer from '../../Redux/Reducer/AuthReducer';
 
 const Chat = props => {
@@ -116,7 +116,7 @@ const Chat = props => {
     //               .onSnapshot(value => {
     //                 // console.log(value.data(),"value")
     //                 // console.log(Chats,"chatass")
-                    
+
     //                 let index;
     //                 Chats.map((val, i) => {
     //                   // console.log(val,"chat ka v")
@@ -173,17 +173,17 @@ const Chat = props => {
     store.dispatch(SET_MSG_ARR([]));
     store.dispatch(ActiveChat(v));
     store?.dispatch(SET_ISGROUP(false));
-    store?.dispatch(SET_KEY(""))
-    props.navigation.navigate('ChatBox',{v})
+    store?.dispatch(SET_KEY(''));
+    props.navigation.navigate('ChatBox', {v});
   };
 
   const GroupChatStart = v => {
     store.dispatch(SET_MSG_ARR([]));
     store.dispatch(ActiveChat(v));
-    store?.dispatch(SET_KEY(""))
+    store?.dispatch(SET_KEY(''));
     store?.dispatch(SET_ISGROUP(true));
 
-    props.navigation.navigate('ChatBox');
+    props.navigation.navigate('ChatBox',{v});
   };
 
   const Item = Item => {
@@ -198,21 +198,25 @@ const Chat = props => {
             GroupChatStart(Item);
           }}>
           <View style={styles.ListView}>
-            <Image source={{ uri: Item.GroupImage }} style={styles.ListImg} />
+            <Image source={{uri: Item.GroupImage}} style={styles.ListImg} />
           </View>
 
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item.groupName}</Text>
-              <Text style={{ color: 'grey' }}>
+              <Text style={{color: 'grey'}}>
                 {Item?.Time && moment(Item?.Time).fromNow(true)}
               </Text>
             </View>
 
             <View style={styles.msgNotiView}>
-              {Item?.lastMsg&&<Text style={styles.LastMsgStyle}>
-                {Item?.lastMsg?.length > 25? Item?.lastMsg?.substring(0, 25) + '...':Item?.lastMsg}
-              </Text>}
+              {Item?.lastMsg && (
+                <Text style={styles.LastMsgStyle}>
+                  {Item?.lastMsg?.length > 25
+                    ? Item?.lastMsg?.substring(0, 25) + '...'
+                    : Item?.lastMsg}
+                </Text>
+              )}
               {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
               </View> */}
@@ -240,22 +244,26 @@ const Chat = props => {
             ChatStart(Item);
           }}>
           <View style={styles.ListView}>
-            <Image source={{ uri: Item?.PhotoUrl }} style={styles.ListImg} />
+            <Image source={{uri: Item?.PhotoUrl}} style={styles.ListImg} />
             {Item.IsOnline && <View style={styles.OnlineDot}></View>}
           </View>
 
           <View style={styles.MainNameView}>
             <View style={styles.NameTimeStyle}>
               <Text style={styles.ListTitle}>{Item?.displayName}</Text>
-              <Text style={{ color: 'grey' }}>
+              <Text style={{color: 'grey'}}>
                 {Item?.lTime && moment(Item?.lTime).fromNow(true)}
               </Text>
             </View>
 
             <View style={styles.msgNotiView}>
-              {Item?.Lmsg &&<Text style={styles.LastMsgStyle}>
-                {Item?.Lmsg?.length >25? Item?.Lmsg?.substring(0, 25) + '...':Item?.Lmsg}
-              </Text>}
+              {Item?.Lmsg && (
+                <Text style={styles.LastMsgStyle}>
+                  {Item?.Lmsg?.length > 25
+                    ? Item?.Lmsg?.substring(0, 25) + '...'
+                    : Item?.Lmsg}
+                </Text>
+              )}
               {/* <View style={styles.msgNoti}>
                 <Text style={{ color: "white", fontWeight: "bold" }}>1</Text>
               </View> */}
@@ -273,7 +281,6 @@ const Chat = props => {
     store.dispatch(GroupCreate(props));
   };
 
-
   const GroupItem = (Item, index) => {
     return (
       <TouchableOpacity
@@ -282,7 +289,7 @@ const Chat = props => {
           gropFunc(index);
         }}>
         <View style={styles.GroupListView}>
-          <Image source={{ uri: Item?.PhotoUrl }} style={styles.GroupListImg} />
+          <Image source={{uri: Item?.PhotoUrl}} style={styles.GroupListImg} />
           <Text style={styles.GroupListTitle}>{Item?.displayName}</Text>
         </View>
         {Item.isSelected && (
@@ -290,7 +297,7 @@ const Chat = props => {
             name="check-circle"
             size={30}
             color="green"
-            style={{ alignItems: 'center' }}
+            style={{alignItems: 'center'}}
           />
         )}
       </TouchableOpacity>
@@ -319,7 +326,7 @@ const Chat = props => {
 
   // console.log(ReducerState?.chatUser.length)
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {/* <View
         style={{
           borderBottomColor: '#cfcfcf',
@@ -362,23 +369,23 @@ const Chat = props => {
       {ReducerState?.chatUser != 0 ? (
         <FlatList
           data={ReducerState?.chatUser}
-          renderItem={({ item }) => Item(item)}
+          renderItem={({item}) => Item(item)}
           keyExtractor={(item, index) => index.toString()}
           style={styles.FlatListStyle}
           showsVerticalScrollIndicator={false}
         />
       ) : (
-          <Text
-            style={{
-              alignSelf: 'center',
-              marginTop: '40%',
-              fontSize: 25,
-              fontWeight: 'bold',
-              color: 'grey',
-            }}>
-            You have no conversations
-          </Text>
-        )}
+        <Text
+          style={{
+            alignSelf: 'center',
+            marginTop: '40%',
+            fontSize: 25,
+            fontWeight: 'bold',
+            color: 'grey',
+          }}>
+          You have no conversations
+        </Text>
+      )}
 
       {ReducerState?.showModal && (
         <Modal
@@ -406,11 +413,12 @@ const Chat = props => {
                   source={require('../../Assets/animation.json')}
                   autoPlay
                   loop={false}
-                  style={{ zIndex: 1 }}
+                  style={{zIndex: 1}}
                   onAnimationFinish={() => {
+                    let v =store.getState()?.ActiveChatReducer?.ChatUser
                     SetLoader(true);
                     store.dispatch(SET_SHOW_MODAL(false));
-                    props.navigation.navigate('ChatBox');
+                    props.navigation.navigate('ChatBox',{v});
                     store.dispatch(SET_SHOW_LOTTIE(false));
                   }}
                 />
@@ -484,7 +492,7 @@ const Chat = props => {
               </View>
               <FlatList
                 data={Groupstate?.modalArr}
-                renderItem={({ item, index }) => GroupItem(item, index)}
+                renderItem={({item, index}) => GroupItem(item, index)}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false}
               />

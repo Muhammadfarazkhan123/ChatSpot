@@ -37,12 +37,12 @@ const AllUsers = props => {
     }
   }, []);
 
-  const ChatStart = Item => {
+  const ChatStart = v => {
     store.dispatch(SET_MSG_ARR([]));
 
-    store.dispatch(ActiveChat(Item));
+    store.dispatch(ActiveChat(v));
 
-    props.navigation.navigate('ChatBox');
+    props.navigation.navigate('ChatBox',{v});
   };
 
   const Search = Text => {

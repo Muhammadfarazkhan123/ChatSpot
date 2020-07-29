@@ -25,24 +25,25 @@ export const ChatDashboard = () => {
       .collection('Users')
       .doc(UserUid)
       .onSnapshot(ChatDetail => {
-        console.log(ChatDetail.data(), 'chatDetail');
+        // console.log(ChatDetail.data(), 'chatDetail');
         let Chats=[]
         // console.log(cha)
-        // ChatDetail?.data()?.ChatId?.forEach(value=>{
-          for (let ind = 0; ind < ChatDetail?.data()?.ChatId?.length; ind++) {
-            let value=ChatDetail?.data()?.ChatId[ind]
+        ChatDetail?.data()?.ChatId?.forEach(value=>{
+          // for (let ind = 0; ind < ChatDetail?.data()?.ChatId?.length; ind++) {
+            // let value=ChatDetail?.data()?.ChatId[ind]
+    if(value.hasOwnProperty('MemberUid')){
+      Chats.push(value)
+      // dispatch(SET_CHAT_USER(Chats))
+
+    }else{
             var obj={
               Lmsg:value.lastMsg,
               lTime:value.timestamp
             } 
-    if(value.hasOwnProperty('MemberUid')){
-      Chats.push(value)
-      dispatch(SET_CHAT_USER(Chats))
-
-    }else{
       firestore().collection('Users').doc(value?.Uid).onSnapshot(Detail=>{
         // console.log(Detail.data(),"user ki detail")
         var Data={...Detail?.data(),...obj}
+            console.log(Data,"obj")
         let index
         Chats.map((v,i)=>{
           if(v.UserUid===value.Uid){
@@ -52,18 +53,18 @@ export const ChatDashboard = () => {
         if(index!= undefined){
           if(Detail?.data()){
             Chats.splice(index,1,Data)
-            dispatch(SET_CHAT_USER(Chats))
+            // dispatch(SET_CHAT_USER(Chats))
           }
         }
         else{
           Chats.push(Data)
-          dispatch(SET_CHAT_USER(Chats))
         }
       })
     }
-          }
-            
-        // })
+    // }
+    
+  })
+  dispatch(SET_CHAT_USER(Chats))
         //   console.log(v,'foreach')
         //   firestore().collection('chat').doc(v.ChatKey).onSnapshot(LMsgs=>{
         //     console.log(LMsgs.data(),"last msg")

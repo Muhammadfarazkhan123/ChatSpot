@@ -55,7 +55,7 @@ const App = () => {
       firestore().collection('Users').doc(UserUid).update({ IsOnline: true })
 
     } else {
-      alert(NextAppState)
+      // alert(NextAppState)
       // console.log('offline')
       firestore().collection('Users').doc(UserUid).update({ IsOnline: false })
 
