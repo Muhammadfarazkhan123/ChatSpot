@@ -79,7 +79,6 @@ import com.android.build.OutputFile
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
-
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -198,6 +197,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[5,6)'
     implementation project(':lottie-react-native')
     implementation project(':react-native-splash-screen')
+    implementation project(':react-native-vector-icons')
     // implementation project(":@react-native-firebase_messaging")
     implementation 'com.google.firebase:firebase-messaging:20.2.3'
 
@@ -229,6 +229,11 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+// project.ext.vectoricons = [
+//     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf'] // Name of the font files you want to copy
+// ]
+
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
