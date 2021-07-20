@@ -27,7 +27,7 @@
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-dom": "^16.13.1",
-    "react-native": "0.62.2",
+    "react-native": "0.62.3",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-emoji-board": "^1.2.1",
     "react-native-emoji-selector": "^0.1.9",
